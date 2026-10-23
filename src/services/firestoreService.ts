@@ -53,11 +53,10 @@ export async function createFirebaseAuthSession(params: {
 
   try {
     await setDoc(doc(db, 'auth_sessions', session.id), session);
-    return session;
   } catch (error) {
-    handleFirestoreError(error, OperationType.CREATE, `auth_sessions/${session.id}`);
-    throw error;
+    console.warn('Session Firestore audit log warning (proceeding with local session):', error);
   }
+  return session;
 }
 
 // Admin Sign-In strictly using Email & Password registered in Firebase Authentication

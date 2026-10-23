@@ -85,8 +85,28 @@ export const LoginPortal: React.FC<LoginPortalProps> = ({
     try {
       const session = await signInAdminWithEmailPassword(adminEmail, adminPassword);
       onAuthenticated(session);
-    } catch {
-      setErrorMsg('Invalid administrator email or password.');
+    } catch (err: unknown) {
+      console.error('Administrator authentication error:', err);
+      const firebaseError = err as { code?: string; message?: string };
+      const code = firebaseError?.code || '';
+
+      if (code === 'auth/unauthorized-domain') {
+        setErrorMsg(
+          'Domain not authorized: Please add "alan-varghese-git.github.io" to Authorized Domains in your Firebase Console (Authentication > Settings > Authorized Domains).'
+        );
+      } else if (code === 'auth/operation-not-allowed') {
+        setErrorMsg(
+          'Email/Password sign-in is disabled in your Firebase project. Please enable Email/Password under Firebase Console > Authentication > Sign-in method.'
+        );
+      } else if (code === 'auth/invalid-credential' || code === 'auth/user-not-found' || code === 'auth/wrong-password') {
+        setErrorMsg('Invalid email or password. Verify the account is created in Firebase Authentication.');
+      } else if (code === 'auth/too-many-requests') {
+        setErrorMsg('Access temporarily blocked due to repeated failed attempts. Please try again later.');
+      } else if (code === 'auth/network-request-failed') {
+        setErrorMsg('Network error: Unable to reach authentication server. Please check your internet connection.');
+      } else {
+        setErrorMsg(firebaseError?.message || 'Authentication failed. Please verify your credentials.');
+      }
     } finally {
       setIsSubmitting(false);
     }
