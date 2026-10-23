@@ -1,0 +1,123 @@
+{
+  "entities": {
+    "Meter": {
+      "title": "Smart Meter Node",
+      "description": "Smart electricity and water AMI metering node representing a consumer connection",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "consumerName": { "type": "string", "maxLength": 100 },
+        "consumerAddress": { "type": "string", "maxLength": 200 },
+        "consumerType": { "type": "string", "enum": ["residential", "commercial", "industrial"] },
+        "transformerId": { "type": "string", "maxLength": 64 },
+        "sanctionedLoadKw": { "type": "number" },
+        "currentPowerKw": { "type": "number" },
+        "currentWaterLph": { "type": "number" },
+        "voltageV": { "type": "number" },
+        "powerFactor": { "type": "number" },
+        "classification": { "type": "string", "enum": ["normal", "theft", "overuse"] },
+        "theftProbability": { "type": "number" },
+        "overuseProbability": { "type": "number" },
+        "occupancyStatus": { "type": "string", "enum": ["occupied", "vacant", "uncertain"] },
+        "anomalyReason": { "type": "string", "maxLength": 500 },
+        "consecutiveOveruseHours": { "type": "number" },
+        "tamperState": { "type": "string", "enum": ["none", "meter_bypass", "line_tap", "vacation", "crypto_mining"] },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "consumerName", "sanctionedLoadKw", "currentPowerKw", "currentWaterLph", "classification"]
+    },
+    "Incident": {
+      "title": "Grid Anomaly Incident",
+      "description": "Flagged theft, overuse, or grid discrepancy incident requiring inspection",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "meterId": { "type": "string", "maxLength": 64 },
+        "consumerName": { "type": "string", "maxLength": 100 },
+        "type": { "type": "string", "enum": ["theft", "overuse", "tamper_flag"] },
+        "severity": { "type": "string", "enum": ["critical", "high", "medium", "low"] },
+        "powerKw": { "type": "number" },
+        "waterLph": { "type": "number" },
+        "occupancyScore": { "type": "number" },
+        "description": { "type": "string", "maxLength": 500 },
+        "timestamp": { "type": "string", "maxLength": 64 },
+        "status": { "type": "string", "enum": ["investigating", "confirmed", "resolved", "dismissed"] },
+        "actionNotes": { "type": "string", "maxLength": 500 },
+        "inspectorAssigned": { "type": "string", "maxLength": 100 }
+      },
+      "required": ["id", "meterId", "type", "severity", "status", "timestamp"]
+    },
+    "Transformer": {
+      "title": "Distribution Transformer Node",
+      "description": "Substation distribution transformer aggregating child consumer meter feeds",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "name": { "type": "string", "maxLength": 100 },
+        "capacityKva": { "type": "number" },
+        "currentLoadKw": { "type": "number" },
+        "aggregateMeterLoadKw": { "type": "number" },
+        "lossDiscrepancyKw": { "type": "number" },
+        "lossPercentage": { "type": "number" },
+        "meterCount": { "type": "number" },
+        "status": { "type": "string", "enum": ["normal", "warning", "overloaded"] },
+        "location": { "type": "string", "maxLength": 150 },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "name", "capacityKva", "currentLoadKw", "status"]
+    },
+    "AdminUser": {
+      "title": "Authorized Grid Administrator Email Slot",
+      "description": "One of the 4 authorized VoltWatch administrator email accounts for Firebase Auth",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 64 },
+        "slotNumber": { "type": "number" },
+        "email": { "type": "string", "maxLength": 120 },
+        "roleTitle": { "type": "string", "maxLength": 120 },
+        "lastLoginAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "slotNumber", "email", "roleTitle"]
+    },
+    "AuthSession": {
+      "title": "Firebase Authentication Session",
+      "description": "Active or historical authentication session for a Firebase-authenticated Admin or Dataset Consumer User",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "role": { "type": "string", "enum": ["admin", "user"] },
+        "subjectId": { "type": "string", "maxLength": 120 },
+        "displayName": { "type": "string", "maxLength": 100 },
+        "subtitle": { "type": "string", "maxLength": 200 },
+        "authMethod": { "type": "string", "enum": ["firebase_google", "firebase_email", "consumer_meter"] },
+        "firebaseUid": { "type": "string", "maxLength": 128 },
+        "status": { "type": "string", "enum": ["active", "signed_out"] },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "lastActiveAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "role", "subjectId", "displayName", "authMethod", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/meters/{meterId}": {
+      "schema": "Meter",
+      "description": "Smart electricity and water AMI metering collection"
+    },
+    "/incidents/{incidentId}": {
+      "schema": "Incident",
+      "description": "Theft and overuse alerts, investigations and resolution records"
+    },
+    "/transformers/{transformerId}": {
+      "schema": "Transformer",
+      "description": "Substation transformer monitoring nodes and technical/non-technical loss aggregation"
+    },
+    "/admins/{adminId}": {
+      "schema": "AdminUser",
+      "description": "4-slot email allowlist for Firebase Administrator Authentication"
+    },
+    "/auth_sessions/{sessionId}": {
+      "schema": "AuthSession",
+      "description": "Real-time Firebase authentication sessions for admins and dataset users"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "VoltWatch - Electricity Theft & Overuse Multi-Source Detection",
+  "description": "Real-time AI-driven electricity theft and power overuse detection platform correlating smart electricity and water meter AMI feeds.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

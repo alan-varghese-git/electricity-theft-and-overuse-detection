@@ -1,0 +1,133 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function isValidMeter(data) {
+      return data.id is string && data.id.size() <= 64
+        && data.consumerName is string && data.consumerName.size() <= 100
+        && (!('consumerAddress' in data) || (data.consumerAddress is string && data.consumerAddress.size() <= 200))
+        && (!('consumerType' in data) || (data.consumerType in ['residential', 'commercial', 'industrial']))
+        && (!('transformerId' in data) || (data.transformerId is string && data.transformerId.size() <= 64))
+        && data.sanctionedLoadKw is number && data.sanctionedLoadKw >= 0
+        && data.currentPowerKw is number && data.currentPowerKw >= 0
+        && data.currentWaterLph is number && data.currentWaterLph >= 0
+        && (!('voltageV' in data) || (data.voltageV is number && data.voltageV >= 0))
+        && (!('powerFactor' in data) || (data.powerFactor is number && data.powerFactor >= 0 && data.powerFactor <= 1))
+        && data.classification in ['normal', 'theft', 'overuse']
+        && (!('theftProbability' in data) || (data.theftProbability is number && data.theftProbability >= 0 && data.theftProbability <= 1))
+        && (!('overuseProbability' in data) || (data.overuseProbability is number && data.overuseProbability >= 0 && data.overuseProbability <= 1))
+        && (!('occupancyStatus' in data) || (data.occupancyStatus in ['occupied', 'vacant', 'uncertain']))
+        && (!('anomalyReason' in data) || (data.anomalyReason is string && data.anomalyReason.size() <= 500))
+        && (!('consecutiveOveruseHours' in data) || (data.consecutiveOveruseHours is number && data.consecutiveOveruseHours >= 0))
+        && (!('tamperState' in data) || (data.tamperState in ['none', 'meter_bypass', 'line_tap', 'vacation', 'crypto_mining']))
+        && (!('updatedAt' in data) || (data.updatedAt is string && data.updatedAt.size() <= 64));
+    }
+
+    function isValidIncident(data) {
+      return data.id is string && data.id.size() <= 64
+        && data.meterId is string && data.meterId.size() <= 64
+        && (!('consumerName' in data) || (data.consumerName is string && data.consumerName.size() <= 100))
+        && data.type in ['theft', 'overuse', 'tamper_flag']
+        && data.severity in ['critical', 'high', 'medium', 'low']
+        && (!('powerKw' in data) || (data.powerKw is number && data.powerKw >= 0))
+        && (!('waterLph' in data) || (data.waterLph is number && data.waterLph >= 0))
+        && (!('occupancyScore' in data) || (data.occupancyScore is number))
+        && (!('description' in data) || (data.description is string && data.description.size() <= 500))
+        && data.timestamp is string && data.timestamp.size() <= 64
+        && data.status in ['investigating', 'confirmed', 'resolved', 'dismissed']
+        && (!('actionNotes' in data) || (data.actionNotes is string && data.actionNotes.size() <= 500))
+        && (!('inspectorAssigned' in data) || (data.inspectorAssigned is string && data.inspectorAssigned.size() <= 100));
+    }
+
+    function isValidTransformer(data) {
+      return data.id is string && data.id.size() <= 64
+        && data.name is string && data.name.size() <= 100
+        && data.capacityKva is number && data.capacityKva >= 0
+        && data.currentLoadKw is number && data.currentLoadKw >= 0
+        && (!('aggregateMeterLoadKw' in data) || (data.aggregateMeterLoadKw is number && data.aggregateMeterLoadKw >= 0))
+        && (!('lossDiscrepancyKw' in data) || (data.lossDiscrepancyKw is number))
+        && (!('lossPercentage' in data) || (data.lossPercentage is number))
+        && (!('meterCount' in data) || (data.meterCount is number && data.meterCount >= 0))
+        && data.status in ['normal', 'warning', 'overloaded']
+        && (!('location' in data) || (data.location is string && data.location.size() <= 150))
+        && (!('updatedAt' in data) || (data.updatedAt is string && data.updatedAt.size() <= 64));
+    }
+
+    function isValidAdminSlot(data) {
+      return data.id in ['ADMIN-1', 'ADMIN-2', 'ADMIN-3', 'ADMIN-4']
+        && data.slotNumber is number && data.slotNumber >= 1 && data.slotNumber <= 4
+        && data.email is string && data.email.size() >= 3 && data.email.size() <= 120
+        && data.roleTitle is string && data.roleTitle.size() <= 120
+        && (!('lastLoginAt' in data) || (data.lastLoginAt is string && data.lastLoginAt.size() <= 64));
+    }
+
+    function isValidAuthSession(data) {
+      return data.id is string && data.id.size() <= 128
+        && data.role in ['admin', 'user']
+        && data.subjectId is string && data.subjectId.size() <= 120
+        && data.displayName is string && data.displayName.size() <= 100
+        && (!('subtitle' in data) || (data.subtitle is string && data.subtitle.size() <= 200))
+        && data.authMethod in ['admin_passkey', 'firebase_google', 'firebase_email', 'consumer_meter']
+        && (!('firebaseUid' in data) || (data.firebaseUid is string && data.firebaseUid.size() <= 128))
+        && data.status in ['active', 'signed_out']
+        && data.createdAt is string && data.createdAt.size() <= 64
+        && (!('lastActiveAt' in data) || (data.lastActiveAt is string && data.lastActiveAt.size() <= 64));
+    }
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Test connection probe document
+    match /test/{docId} {
+      allow read: if true;
+    }
+
+    // Meters collection
+    match /meters/{meterId} {
+      allow get, list: if true;
+      allow create: if isValidId(meterId) && incoming().id == meterId && isValidMeter(incoming());
+      allow update: if isValidId(meterId) && incoming().id == meterId && isValidMeter(incoming());
+      allow delete: if isValidId(meterId);
+    }
+
+    // Incidents collection
+    match /incidents/{incidentId} {
+      allow get, list: if true;
+      allow create: if isValidId(incidentId) && incoming().id == incidentId && isValidIncident(incoming());
+      allow update: if isValidId(incidentId) && incoming().id == incidentId && isValidIncident(incoming());
+      allow delete: if isValidId(incidentId);
+    }
+
+    // Transformers collection
+    match /transformers/{transformerId} {
+      allow get, list: if true;
+      allow create: if isValidId(transformerId) && incoming().id == transformerId && isValidTransformer(incoming());
+      allow update: if isValidId(transformerId) && incoming().id == transformerId && isValidTransformer(incoming());
+      allow delete: if isValidId(transformerId);
+    }
+
+    // 4 Authorized Administrator Email Slots (ADMIN-1 through ADMIN-4)
+    match /admins/{adminId} {
+      allow get, list: if true;
+      allow create, update: if isValidId(adminId) && incoming().id == adminId && isValidAdminSlot(incoming());
+      allow delete: if isValidId(adminId);
+    }
+
+    // Authentication Sessions collection
+    match /auth_sessions/{sessionId} {
+      allow get, list: if true;
+      allow create, update: if isValidId(sessionId) && incoming().id == sessionId && isValidAuthSession(incoming());
+      allow delete: if isValidId(sessionId);
+    }
+  }
+}
