@@ -218,21 +218,21 @@ export const LoginPortal: React.FC<LoginPortalProps> = ({
         </div>
 
         {/* Role Selector Tabs */}
-        <div className="grid grid-cols-2 gap-3 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
           <button
             type="button"
             onClick={() => {
               setLoginMode('user');
               setErrorMsg(null);
             }}
-            className={`p-4 rounded-xl border text-left transition-colors cursor-pointer flex items-start gap-3 ${
+            className={`min-h-[64px] p-4 rounded-xl border text-left transition-colors cursor-pointer flex items-start gap-3.5 ${
               loginMode === 'user'
-                ? 'bg-white dark:bg-slate-900 border-slate-900 dark:border-white ring-1 ring-slate-900 dark:ring-white'
+                ? 'bg-white dark:bg-slate-900 border-slate-900 dark:border-white ring-2 ring-slate-900 dark:ring-white shadow-xs'
                 : 'bg-white/70 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-900'
             }`}
           >
             <div
-              className={`p-2 rounded-lg shrink-0 ${
+              className={`p-2.5 rounded-lg shrink-0 ${
                 loginMode === 'user'
                   ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900'
                   : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
@@ -244,7 +244,7 @@ export const LoginPortal: React.FC<LoginPortalProps> = ({
               <div className="text-sm font-bold text-slate-900 dark:text-white">
                 Consumer User Login
               </div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
                 Sign in with your consumer account ({meters.length} active meters) to view personal usage statistics, 24h load profiles, and billing.
               </div>
             </div>
@@ -256,14 +256,14 @@ export const LoginPortal: React.FC<LoginPortalProps> = ({
               setLoginMode('admin');
               setErrorMsg(null);
             }}
-            className={`p-4 rounded-xl border text-left transition-colors cursor-pointer flex items-start gap-3 ${
+            className={`min-h-[64px] p-4 rounded-xl border text-left transition-colors cursor-pointer flex items-start gap-3.5 ${
               loginMode === 'admin'
-                ? 'bg-white dark:bg-slate-900 border-slate-900 dark:border-white ring-1 ring-slate-900 dark:ring-white'
+                ? 'bg-white dark:bg-slate-900 border-slate-900 dark:border-white ring-2 ring-slate-900 dark:ring-white shadow-xs'
                 : 'bg-white/70 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-900'
             }`}
           >
             <div
-              className={`p-2 rounded-lg shrink-0 ${
+              className={`p-2.5 rounded-lg shrink-0 ${
                 loginMode === 'admin'
                   ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900'
                   : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
@@ -275,7 +275,7 @@ export const LoginPortal: React.FC<LoginPortalProps> = ({
               <div className="text-sm font-bold text-slate-900 dark:text-white">
                 Administrator Login
               </div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
                 Sign in with your administrator email and password to manage grid telemetry, substations, and field incidents.
               </div>
             </div>
@@ -291,26 +291,26 @@ export const LoginPortal: React.FC<LoginPortalProps> = ({
 
         {/* Mode 1: Consumer User Login (Dataset Users) */}
         {loginMode === 'user' ? (
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 shadow-xs">
             {/* Left Column: Dataset User Directory */}
-            <div className="lg:col-span-7 p-5 border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-slate-800 flex flex-col">
-              <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <div className="lg:col-span-7 p-4 sm:p-5 border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-slate-800 flex flex-col">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-3">
                 <div>
                   <h2 className="text-sm font-bold text-slate-900 dark:text-white">
-                    Select Consumer Account from Dataset
+                    Select Consumer Account
                   </h2>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Choose your smart meter account from the active utility dataset
+                    Choose your meter node from active dataset
                   </p>
                 </div>
 
-                <div className="flex items-center gap-1.5">
-                  <Database className="w-3.5 h-3.5 text-slate-400" />
+                <div className="flex items-center gap-1.5 self-start sm:self-auto w-full sm:w-auto">
+                  <Database className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                   <select
                     value={currentDataset}
                     onChange={(e) => onSwitchDataset(e.target.value as 'default' | 'us_cities')}
                     disabled={isLoadingData}
-                    className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1 text-xs font-medium text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer"
+                    className="w-full sm:w-auto bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-medium text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer"
                   >
                     <option value="us_cities">US Cities Dataset (30 Users)</option>
                     <option value="default">Greenwood Grid (12 Users)</option>
@@ -318,20 +318,20 @@ export const LoginPortal: React.FC<LoginPortalProps> = ({
                 </div>
               </div>
 
-              {/* Search input */}
+              {/* Search input - text-base on mobile to avoid iOS Safari auto-zoom */}
               <div className="relative mb-3">
                 <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={userSearch}
                   onChange={(e) => setUserSearch(e.target.value)}
-                  placeholder="Search by consumer name, meter ID (e.g. US-ATX-101), or city..."
-                  className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-9 pr-3 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
+                  placeholder="Search name, meter ID (e.g. US-ATX-101), or city..."
+                  className="w-full min-h-[44px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-9 pr-3 py-2.5 text-base sm:text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
                 />
               </div>
 
-              {/* Scrollable Dataset Consumer List */}
-              <div className="max-h-72 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800 border border-slate-200 dark:border-slate-800 rounded-lg">
+              {/* Scrollable Dataset Consumer List with touch optimization */}
+              <div className="max-h-72 sm:max-h-80 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800 border border-slate-200 dark:border-slate-800 rounded-lg touch-pan-y">
                 {isLoadingData ? (
                   <div className="p-8 text-center text-xs text-slate-500 dark:text-slate-400">
                     Loading consumer accounts...
@@ -351,10 +351,10 @@ export const LoginPortal: React.FC<LoginPortalProps> = ({
                           setSelectedMeterId(m.id);
                           setErrorMsg(null);
                         }}
-                        className={`w-full px-3.5 py-2.5 text-left transition-colors flex items-center justify-between gap-3 cursor-pointer ${
+                        className={`w-full min-h-[50px] px-3.5 py-3 text-left transition-colors flex items-center justify-between gap-3 cursor-pointer ${
                           isSelected
-                            ? 'bg-slate-100 dark:bg-slate-800'
-                            : 'hover:bg-slate-50 dark:hover:bg-slate-800/40'
+                            ? 'bg-slate-100 dark:bg-slate-800 font-medium'
+                            : 'hover:bg-slate-50 dark:hover:bg-slate-800/40 active:bg-slate-100 dark:active:bg-slate-800'
                         }`}
                       >
                         <div className="min-w-0">
@@ -388,7 +388,7 @@ export const LoginPortal: React.FC<LoginPortalProps> = ({
             </div>
 
             {/* Right Column: Consumer Session Form */}
-            <form onSubmit={handleConsumerSubmit} className="lg:col-span-5 p-5 flex flex-col justify-between space-y-4">
+            <form onSubmit={handleConsumerSubmit} className="lg:col-span-5 p-4 sm:p-5 flex flex-col justify-between space-y-4">
               <div className="space-y-4">
                 <div>
                   <h3 className="text-sm font-bold text-slate-900 dark:text-white">
@@ -436,7 +436,7 @@ export const LoginPortal: React.FC<LoginPortalProps> = ({
                     type="text"
                     readOnly
                     value={selectedMeter?.id || ''}
-                    className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-xs font-mono font-bold text-slate-900 dark:text-white"
+                    className="w-full min-h-[44px] bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-base sm:text-xs font-mono font-bold text-slate-900 dark:text-white"
                   />
                 </div>
 
@@ -451,7 +451,7 @@ export const LoginPortal: React.FC<LoginPortalProps> = ({
                       value={consumerPin}
                       onChange={(e) => setConsumerPin(e.target.value)}
                       placeholder="Enter PIN (default: 1234)"
-                      className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-8 pr-3 py-2 text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
+                      className="w-full min-h-[44px] bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-8 pr-3 py-2 text-base sm:text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
                     />
                   </div>
                 </div>
@@ -460,7 +460,7 @@ export const LoginPortal: React.FC<LoginPortalProps> = ({
               <button
                 type="submit"
                 disabled={isSubmitting || !selectedMeter}
-                className="w-full py-2.5 px-4 rounded-lg text-xs font-semibold bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-200 text-white dark:text-slate-900 flex items-center justify-center gap-2 transition-colors disabled:opacity-50 cursor-pointer"
+                className="w-full min-h-[44px] py-3 px-4 rounded-lg text-sm sm:text-xs font-semibold bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-200 text-white dark:text-slate-900 flex items-center justify-center gap-2 transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
               >
                 <span>
                   {isSubmitting
@@ -473,7 +473,7 @@ export const LoginPortal: React.FC<LoginPortalProps> = ({
           </div>
         ) : (
           /* Mode 2: Administrator Email & Password Login Only */
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 max-w-md mx-auto w-full space-y-5">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 sm:p-6 max-w-md mx-auto w-full space-y-5 shadow-xs">
             <div className="border-b border-slate-200 dark:border-slate-800 pb-4">
               <h2 className="text-base font-bold text-slate-900 dark:text-white">
                 Administrator Sign In
@@ -496,7 +496,7 @@ export const LoginPortal: React.FC<LoginPortalProps> = ({
                     value={adminEmail}
                     onChange={(e) => setAdminEmail(e.target.value)}
                     placeholder="admin@example.com"
-                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-9 pr-3 py-2.5 text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
+                    className="w-full min-h-[44px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-9 pr-3 py-2.5 text-base sm:text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
                   />
                 </div>
               </div>
@@ -513,7 +513,7 @@ export const LoginPortal: React.FC<LoginPortalProps> = ({
                     value={adminPassword}
                     onChange={(e) => setAdminPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-9 pr-3 py-2.5 text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
+                    className="w-full min-h-[44px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-9 pr-3 py-2.5 text-base sm:text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
                   />
                 </div>
               </div>
@@ -521,7 +521,7 @@ export const LoginPortal: React.FC<LoginPortalProps> = ({
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-2.5 px-4 rounded-lg text-xs font-semibold bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-200 text-white dark:text-slate-900 flex items-center justify-center gap-2 transition-colors disabled:opacity-50 cursor-pointer"
+                className="w-full min-h-[44px] py-3 px-4 rounded-lg text-sm sm:text-xs font-semibold bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-200 text-white dark:text-slate-900 flex items-center justify-center gap-2 transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
               >
                 <span>{isSubmitting ? 'Signing In...' : 'Sign In'}</span>
                 <ArrowRight className="w-4 h-4" />

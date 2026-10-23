@@ -28,8 +28,8 @@ export const IncidentDesk: React.FC<IncidentDeskProps> = ({
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden mb-6 transition-colors duration-150">
-      <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden mb-6 transition-colors duration-150 shadow-xs">
+      <div className="p-3.5 sm:p-4 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h2 className="text-sm font-bold text-slate-900 dark:text-white">
             Active Anomaly Incidents &amp; Field Dispatch
@@ -39,7 +39,7 @@ export const IncidentDesk: React.FC<IncidentDeskProps> = ({
           </p>
         </div>
 
-        <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg text-xs">
+        <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg text-xs overflow-x-auto w-full sm:w-auto no-scrollbar touch-pan-x">
           {(['all', 'investigating', 'confirmed', 'resolved'] as const).map((st) => {
             const count =
               st === 'all'
@@ -51,7 +51,7 @@ export const IncidentDesk: React.FC<IncidentDeskProps> = ({
                 key={st}
                 type="button"
                 onClick={() => setStatusFilter(st)}
-                className={`px-3 py-1 rounded-md text-xs font-medium capitalize transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                className={`min-h-[36px] sm:min-h-0 flex-1 sm:flex-none px-3 py-1.5 sm:py-1 rounded-md text-xs font-medium capitalize transition-colors whitespace-nowrap shrink-0 cursor-pointer text-center ${
                   isActive
                     ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-semibold shadow-xs'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
@@ -128,7 +128,7 @@ export const IncidentDesk: React.FC<IncidentDeskProps> = ({
                     <button
                       type="button"
                       onClick={() => handleUpdateStatus(inc.id, 'confirmed')}
-                      className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-50 dark:bg-amber-950/60 hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-200 dark:border-amber-800/70 text-amber-800 dark:text-amber-200 transition-colors cursor-pointer"
+                      className="min-h-[38px] px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-50 dark:bg-amber-950/60 hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-200 dark:border-amber-800/70 text-amber-800 dark:text-amber-200 transition-colors cursor-pointer"
                     >
                       Confirm
                     </button>
@@ -137,7 +137,7 @@ export const IncidentDesk: React.FC<IncidentDeskProps> = ({
                     <button
                       type="button"
                       onClick={() => handleUpdateStatus(inc.id, 'resolved')}
-                      className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-200 dark:border-emerald-800/70 text-emerald-800 dark:text-emerald-200 transition-colors cursor-pointer"
+                      className="min-h-[38px] px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 border border-emerald-200 dark:border-emerald-800/70 text-emerald-800 dark:text-emerald-200 transition-colors cursor-pointer"
                     >
                       Resolve
                     </button>
@@ -146,7 +146,7 @@ export const IncidentDesk: React.FC<IncidentDeskProps> = ({
                   <select
                     value={inc.inspectorAssigned || 'Field Unit A-101'}
                     onChange={(e) => handleAssignInspector(inc.id, e.target.value)}
-                    className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-200 focus:outline-none focus:border-slate-900 dark:focus:border-slate-400 cursor-pointer"
+                    className="min-h-[38px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-200 focus:outline-none focus:border-slate-900 dark:focus:border-slate-400 cursor-pointer"
                   >
                     <option value="Field Unit A-101">Field Unit A-101</option>
                     <option value="Field Unit B-204">Field Unit B-204</option>

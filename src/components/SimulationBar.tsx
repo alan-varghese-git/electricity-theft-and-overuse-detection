@@ -111,12 +111,12 @@ export const SimulationBar: React.FC<SimulationBarProps> = ({
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 mb-5 transition-colors duration-150">
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3">
+    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 mb-5 transition-colors duration-150 shadow-xs">
+      <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
         {/* Left: Target Meter Selection & Scenario Injection Controls */}
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-center gap-2 mr-1">
-            <label htmlFor="target-meter-select" className="text-xs font-medium text-slate-500 dark:text-slate-400 whitespace-nowrap">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2.5">
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <label htmlFor="target-meter-select" className="text-xs font-medium text-slate-500 dark:text-slate-400 whitespace-nowrap shrink-0">
               Target Meter:
             </label>
             <select
@@ -130,7 +130,7 @@ export const SimulationBar: React.FC<SimulationBarProps> = ({
                   if (found) onSelectMeter(found);
                 }
               }}
-              className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-mono font-semibold text-slate-900 dark:text-slate-100 focus:outline-none focus:border-slate-900 dark:focus:border-slate-400 cursor-pointer"
+              className="flex-1 sm:flex-none min-h-[40px] sm:min-h-0 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-mono font-semibold text-slate-900 dark:text-slate-100 focus:outline-none focus:border-slate-900 dark:focus:border-slate-400 cursor-pointer"
             >
               {meters.map((m) => (
                 <option key={m.id} value={m.id}>
@@ -140,84 +140,89 @@ export const SimulationBar: React.FC<SimulationBarProps> = ({
             </select>
           </div>
 
-          <button
-            type="button"
-            onClick={() => handleInjectScenario('theft')}
-            disabled={isProcessing || meters.length === 0}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-rose-50 dark:bg-rose-950/60 hover:bg-rose-100 dark:hover:bg-rose-900/60 border border-rose-200 dark:border-rose-800/70 text-rose-800 dark:text-rose-200 flex items-center gap-1.5 transition-colors disabled:opacity-50 whitespace-nowrap shrink-0 cursor-pointer"
-          >
-            <AlertTriangle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
-            <span>Inject Theft</span>
-          </button>
+          {/* Scenario Buttons: 2x2 grid on mobile, flex on desktop */}
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5 sm:gap-2">
+            <button
+              type="button"
+              onClick={() => handleInjectScenario('theft')}
+              disabled={isProcessing || meters.length === 0}
+              className="min-h-[40px] sm:min-h-0 px-3 py-1.5 rounded-lg text-xs font-medium bg-rose-50 dark:bg-rose-950/60 hover:bg-rose-100 dark:hover:bg-rose-900/60 border border-rose-200 dark:border-rose-800/70 text-rose-800 dark:text-rose-200 flex items-center justify-center gap-1.5 transition-colors disabled:opacity-50 whitespace-nowrap cursor-pointer"
+            >
+              <AlertTriangle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400 shrink-0" />
+              <span>Inject Theft</span>
+            </button>
 
-          <button
-            type="button"
-            onClick={() => handleInjectScenario('overuse')}
-            disabled={isProcessing || meters.length === 0}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-amber-50 dark:bg-amber-950/60 hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-200 dark:border-amber-800/70 text-amber-800 dark:text-amber-200 flex items-center gap-1.5 transition-colors disabled:opacity-50 whitespace-nowrap shrink-0 cursor-pointer"
-          >
-            <Flame className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-            <span>Inject Overuse</span>
-          </button>
+            <button
+              type="button"
+              onClick={() => handleInjectScenario('overuse')}
+              disabled={isProcessing || meters.length === 0}
+              className="min-h-[40px] sm:min-h-0 px-3 py-1.5 rounded-lg text-xs font-medium bg-amber-50 dark:bg-amber-950/60 hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-200 dark:border-amber-800/70 text-amber-800 dark:text-amber-200 flex items-center justify-center gap-1.5 transition-colors disabled:opacity-50 whitespace-nowrap cursor-pointer"
+            >
+              <Flame className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
+              <span>Inject Overuse</span>
+            </button>
 
-          <button
-            type="button"
-            onClick={() => handleInjectScenario('vacation')}
-            disabled={isProcessing || meters.length === 0}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-sky-50 dark:bg-sky-950/60 hover:bg-sky-100 dark:hover:bg-sky-900/60 border border-sky-200 dark:border-sky-800/70 text-sky-800 dark:text-sky-200 flex items-center gap-1.5 transition-colors disabled:opacity-50 whitespace-nowrap shrink-0 cursor-pointer"
-          >
-            <ShieldCheck className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
-            <span>Set Vacant</span>
-          </button>
+            <button
+              type="button"
+              onClick={() => handleInjectScenario('vacation')}
+              disabled={isProcessing || meters.length === 0}
+              className="min-h-[40px] sm:min-h-0 px-3 py-1.5 rounded-lg text-xs font-medium bg-sky-50 dark:bg-sky-950/60 hover:bg-sky-100 dark:hover:bg-sky-900/60 border border-sky-200 dark:border-sky-800/70 text-sky-800 dark:text-sky-200 flex items-center justify-center gap-1.5 transition-colors disabled:opacity-50 whitespace-nowrap cursor-pointer"
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
+              <span>Set Vacant</span>
+            </button>
 
-          <button
-            type="button"
-            onClick={() => handleInjectScenario('normal')}
-            disabled={isProcessing || meters.length === 0}
-            className="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center gap-1.5 transition-colors disabled:opacity-50 whitespace-nowrap shrink-0 cursor-pointer"
-          >
-            <RotateCcw className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" />
-            <span>Restore Normal</span>
-          </button>
+            <button
+              type="button"
+              onClick={() => handleInjectScenario('normal')}
+              disabled={isProcessing || meters.length === 0}
+              className="min-h-[40px] sm:min-h-0 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center justify-center gap-1.5 transition-colors disabled:opacity-50 whitespace-nowrap cursor-pointer"
+            >
+              <RotateCcw className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400 shrink-0" />
+              <span>Restore</span>
+            </button>
+          </div>
         </div>
 
         {/* Right: Simulation Stream Controls */}
-        <div className="flex items-center gap-2.5 self-end lg:self-auto">
+        <div className="flex items-center justify-between sm:justify-end gap-2.5 pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-100 dark:border-slate-800">
           <span className="text-xs text-slate-500 dark:text-slate-400 font-mono tabular-nums">
-            Grid Clock: <strong className="text-slate-900 dark:text-white">{simulationHour.toString().padStart(2, '0')}:00</strong>
+            Clock: <strong className="text-slate-900 dark:text-white">{simulationHour.toString().padStart(2, '0')}:00</strong>
           </span>
 
-          <button
-            type="button"
-            onClick={() => setSimulationHour((prev) => (prev + 1) % 24)}
-            className="px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-1 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
-            title="Advance Clock 1 Hour"
-          >
-            <FastForward className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
-            <span>+1h</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setSimulationHour((prev) => (prev + 1) % 24)}
+              className="min-h-[40px] sm:min-h-0 px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-1 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              title="Advance Clock 1 Hour"
+            >
+              <FastForward className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
+              <span>+1h</span>
+            </button>
 
-          <button
-            type="button"
-            onClick={() => setIsSimulating(!isSimulating)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              isSimulating
-                ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900'
-                : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200'
-            }`}
-          >
-            {isSimulating ? (
-              <>
-                <Pause className="w-3.5 h-3.5 fill-current" />
-                <span>Pause Stream</span>
-              </>
-            ) : (
-              <>
-                <Play className="w-3.5 h-3.5 fill-current" />
-                <span>Auto Stream</span>
-              </>
-            )}
-          </button>
+            <button
+              type="button"
+              onClick={() => setIsSimulating(!isSimulating)}
+              className={`min-h-[40px] sm:min-h-0 px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                isSimulating
+                  ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900'
+                  : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200'
+              }`}
+            >
+              {isSimulating ? (
+                <>
+                  <Pause className="w-3.5 h-3.5 fill-current" />
+                  <span>Pause</span>
+                </>
+              ) : (
+                <>
+                  <Play className="w-3.5 h-3.5 fill-current" />
+                  <span>Auto Stream</span>
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </div>
 

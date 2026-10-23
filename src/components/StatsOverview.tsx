@@ -24,21 +24,21 @@ export const StatsOverview: React.FC<StatsOverviewProps> = ({
   const totalWaterFlowLph = meters.reduce((acc, m) => acc + (m.currentWaterLph || 0), 0);
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden mb-5 transition-colors duration-150">
-      <div className="grid grid-cols-2 md:grid-cols-5 divide-y md:divide-y-0 md:divide-x divide-slate-200 dark:divide-slate-800">
+    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden mb-5 transition-colors duration-150 shadow-xs">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 divide-y sm:divide-y-0 divide-slate-200 dark:divide-slate-800 sm:divide-x">
         {/* 1. Total Monitored Meters */}
         <button
           type="button"
           onClick={() => onFilterByStatus?.('all')}
-          className={`p-4 text-left transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60 cursor-pointer ${
-            activeFilter === 'all' ? 'bg-slate-50 dark:bg-slate-800/60' : ''
+          className={`p-3 sm:p-4 text-left transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/60 cursor-pointer min-h-[80px] ${
+            activeFilter === 'all' ? 'bg-slate-50 dark:bg-slate-800/60 ring-1 ring-slate-900/20 dark:ring-white/20' : ''
           }`}
         >
-          <div className="text-xs font-medium text-slate-500 dark:text-slate-400">Total Smart Meters</div>
-          <div className="text-2xl font-bold font-mono text-slate-900 dark:text-white mt-1 tabular-nums">
+          <div className="text-[11px] sm:text-xs font-medium text-slate-500 dark:text-slate-400 truncate">Total Smart Meters</div>
+          <div className="text-xl sm:text-2xl font-bold font-mono text-slate-900 dark:text-white mt-1 tabular-nums">
             {totalMeters}
           </div>
-          <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 tabular-nums">
+          <div className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5 tabular-nums truncate">
             {normalMeters.length} normal · {vacantMeters.length} vacant
           </div>
         </button>
@@ -47,16 +47,16 @@ export const StatsOverview: React.FC<StatsOverviewProps> = ({
         <button
           type="button"
           onClick={() => onFilterByStatus?.('theft')}
-          className={`p-4 text-left transition-colors hover:bg-rose-50/40 dark:hover:bg-rose-950/30 cursor-pointer ${
-            activeFilter === 'theft' ? 'bg-rose-50/50 dark:bg-rose-950/40' : ''
+          className={`p-3 sm:p-4 text-left transition-colors hover:bg-rose-50/40 dark:hover:bg-rose-950/30 cursor-pointer min-h-[80px] ${
+            activeFilter === 'theft' ? 'bg-rose-50/50 dark:bg-rose-950/40 ring-1 ring-rose-500/30' : ''
           }`}
         >
-          <div className="text-xs font-medium text-rose-700 dark:text-rose-400">Meter Bypass Theft</div>
-          <div className="text-2xl font-bold font-mono text-rose-600 dark:text-rose-400 mt-1 tabular-nums">
+          <div className="text-[11px] sm:text-xs font-medium text-rose-700 dark:text-rose-400 truncate">Meter Bypass Theft</div>
+          <div className="text-xl sm:text-2xl font-bold font-mono text-rose-600 dark:text-rose-400 mt-1 tabular-nums">
             {theftMeters.length}
           </div>
-          <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Active water · Suppressed power
+          <div className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+            Active water · Zero power
           </div>
         </button>
 
@@ -64,38 +64,38 @@ export const StatsOverview: React.FC<StatsOverviewProps> = ({
         <button
           type="button"
           onClick={() => onFilterByStatus?.('overuse')}
-          className={`p-4 text-left transition-colors hover:bg-amber-50/40 dark:hover:bg-amber-950/30 cursor-pointer ${
-            activeFilter === 'overuse' ? 'bg-amber-50/50 dark:bg-amber-950/40' : ''
+          className={`p-3 sm:p-4 text-left transition-colors hover:bg-amber-50/40 dark:hover:bg-amber-950/30 cursor-pointer min-h-[80px] ${
+            activeFilter === 'overuse' ? 'bg-amber-50/50 dark:bg-amber-950/40 ring-1 ring-amber-500/30' : ''
           }`}
         >
-          <div className="text-xs font-medium text-amber-700 dark:text-amber-400">Sanctioned Overuse</div>
-          <div className="text-2xl font-bold font-mono text-amber-600 dark:text-amber-400 mt-1 tabular-nums">
+          <div className="text-[11px] sm:text-xs font-medium text-amber-700 dark:text-amber-400 truncate">Sanctioned Overuse</div>
+          <div className="text-xl sm:text-2xl font-bold font-mono text-amber-600 dark:text-amber-400 mt-1 tabular-nums">
             {overuseMeters.length}
           </div>
-          <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Exceeding contracted kW limit
+          <div className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+            Exceeding kW limit
           </div>
         </button>
 
         {/* 4. Active Grid Power Load */}
-        <div className="p-4 text-left">
-          <div className="text-xs font-medium text-slate-500 dark:text-slate-400">Total Power Draw</div>
-          <div className="text-2xl font-bold font-mono text-slate-900 dark:text-white mt-1 tabular-nums">
+        <div className="p-3 sm:p-4 text-left min-h-[80px]">
+          <div className="text-[11px] sm:text-xs font-medium text-slate-500 dark:text-slate-400 truncate">Total Power Draw</div>
+          <div className="text-xl sm:text-2xl font-bold font-mono text-slate-900 dark:text-white mt-1 tabular-nums truncate">
             {totalDemandKw.toFixed(1)} <span className="text-xs font-normal text-slate-500 dark:text-slate-400">kW</span>
           </div>
-          <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 tabular-nums">
-            of {totalSanctionedKw.toFixed(0)} kW sanctioned
+          <div className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5 tabular-nums truncate">
+            of {totalSanctionedKw.toFixed(0)} kW limit
           </div>
         </div>
 
         {/* 5. Municipal Water Correlation */}
-        <div className="p-4 text-left col-span-2 md:col-span-1">
-          <div className="text-xs font-medium text-slate-500 dark:text-slate-400">Total Water Flow</div>
-          <div className="text-2xl font-bold font-mono text-slate-900 dark:text-white mt-1 tabular-nums">
+        <div className="p-3 sm:p-4 text-left col-span-2 sm:col-span-1 min-h-[80px]">
+          <div className="text-[11px] sm:text-xs font-medium text-slate-500 dark:text-slate-400 truncate">Total Water Flow</div>
+          <div className="text-xl sm:text-2xl font-bold font-mono text-slate-900 dark:text-white mt-1 tabular-nums truncate">
             {totalWaterFlowLph.toFixed(0)} <span className="text-xs font-normal text-slate-500 dark:text-slate-400">L/h</span>
           </div>
-          <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            Occupancy ground-truth stream
+          <div className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+            Occupancy stream
           </div>
         </div>
       </div>

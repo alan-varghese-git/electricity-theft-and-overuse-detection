@@ -26,8 +26,8 @@ export const WorkOrderModal: React.FC<WorkOrderModalProps> = ({ meter, onClose }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-[1px]">
-      <div className="w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/50 backdrop-blur-[1px]">
+      <div className="w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden flex flex-col max-h-[90vh] shadow-2xl">
         <div className="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
           <h2 className="text-sm font-bold text-slate-900 dark:text-white">
             Create Field Inspection Work Order
@@ -35,7 +35,7 @@ export const WorkOrderModal: React.FC<WorkOrderModalProps> = ({ meter, onClose }
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+            className="min-h-[36px] min-w-[36px] p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer flex items-center justify-center"
           >
             <X className="w-4 h-4" />
           </button>
@@ -50,7 +50,7 @@ export const WorkOrderModal: React.FC<WorkOrderModalProps> = ({ meter, onClose }
             </p>
           </div>
         ) : (
-          <form onSubmit={handleDispatch} className="p-5 space-y-4 text-xs">
+          <form onSubmit={handleDispatch} className="p-4 sm:p-5 space-y-4 text-xs overflow-y-auto flex-1">
             <div className="bg-slate-50 dark:bg-slate-800/60 p-3 rounded-lg border border-slate-200 dark:border-slate-800 space-y-1">
               <div className="flex justify-between font-medium text-slate-900 dark:text-white">
                 <span>
@@ -61,7 +61,7 @@ export const WorkOrderModal: React.FC<WorkOrderModalProps> = ({ meter, onClose }
               <div className="text-slate-500 dark:text-slate-400">
                 {meter.consumerAddress} · {meter.transformerId}
               </div>
-              <div className="text-slate-700 dark:text-slate-300 pt-1 flex gap-4 font-mono tabular-nums">
+              <div className="text-slate-700 dark:text-slate-300 pt-1 flex flex-wrap gap-3 font-mono tabular-nums text-[11px]">
                 <span>Power: {meter.currentPowerKw.toFixed(2)} kW</span>
                 <span>Water: {meter.currentWaterLph.toFixed(1)} L/h</span>
                 <span className="capitalize">Occupancy: {meter.occupancyStatus}</span>
@@ -73,7 +73,7 @@ export const WorkOrderModal: React.FC<WorkOrderModalProps> = ({ meter, onClose }
               <select
                 value={inspector}
                 onChange={(e) => setInspector(e.target.value)}
-                className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
+                className="w-full min-h-[44px] sm:min-h-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-base sm:text-xs text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
               >
                 <option value="Field Unit A-101">Field Unit A-101 (Revenue Protection)</option>
                 <option value="Field Unit B-204">Field Unit B-204 (Substation Engineering)</option>
@@ -87,7 +87,7 @@ export const WorkOrderModal: React.FC<WorkOrderModalProps> = ({ meter, onClose }
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value)}
-                className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
+                className="w-full min-h-[44px] sm:min-h-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-base sm:text-xs text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
               >
                 <option value="Urgent / Immediate Dispatch">Urgent / Immediate Dispatch</option>
                 <option value="High (Within 4 Hours)">High (Within 4 Hours)</option>
@@ -101,7 +101,7 @@ export const WorkOrderModal: React.FC<WorkOrderModalProps> = ({ meter, onClose }
                 rows={3}
                 value={instructions}
                 onChange={(e) => setInstructions(e.target.value)}
-                className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400 leading-relaxed"
+                className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-2.5 text-base sm:text-xs text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400 leading-relaxed"
               />
             </div>
 
@@ -109,13 +109,13 @@ export const WorkOrderModal: React.FC<WorkOrderModalProps> = ({ meter, onClose }
               <button
                 type="button"
                 onClick={onClose}
-                className="px-3.5 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer"
+                className="min-h-[44px] px-4 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 rounded-lg font-semibold bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-200 text-white dark:text-slate-900 flex items-center gap-1.5 transition-colors cursor-pointer"
+                className="min-h-[44px] px-5 py-2 rounded-lg font-semibold bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-200 text-white dark:text-slate-900 flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>Dispatch Work Order</span>

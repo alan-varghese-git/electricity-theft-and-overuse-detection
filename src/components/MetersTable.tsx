@@ -56,25 +56,25 @@ export const MetersTable: React.FC<MetersTableProps> = ({
   });
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden mb-6 transition-colors duration-150">
+    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden mb-6 transition-colors duration-150 shadow-xs">
       {/* Table Filter Bar */}
-      <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-2.5">
-          <div className="relative">
+      <div className="p-3.5 sm:p-4 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-2.5 w-full sm:w-auto">
+          <div className="relative w-full sm:w-64">
             <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search meter ID, consumer, or city..."
+              placeholder="Search ID, consumer, or city..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-9 pr-3 py-1.5 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:bg-white dark:focus:bg-slate-800 focus:border-slate-900 dark:focus:border-slate-400 w-56 sm:w-64 transition-colors"
+              className="w-full min-h-[44px] sm:min-h-0 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-9 pr-3 py-2 sm:py-1.5 text-base sm:text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:bg-white dark:focus:bg-slate-800 focus:border-slate-900 dark:focus:border-slate-400 transition-colors"
             />
           </div>
 
           <select
             value={transformerFilter}
             onChange={(e) => setTransformerFilter(e.target.value)}
-            className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-200 focus:outline-none focus:border-slate-900 dark:focus:border-slate-400 font-mono cursor-pointer"
+            className="w-full sm:w-auto min-h-[44px] sm:min-h-0 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-2 sm:py-1.5 text-xs text-slate-700 dark:text-slate-200 focus:outline-none focus:border-slate-900 dark:focus:border-slate-400 font-mono cursor-pointer"
           >
             <option value="all">All Substations ({feederOptions.length})</option>
             {feederOptions.map((f) => (
@@ -85,8 +85,8 @@ export const MetersTable: React.FC<MetersTableProps> = ({
           </select>
         </div>
 
-        {/* Interactive Status Filter Tabs */}
-        <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg text-xs">
+        {/* Interactive Status Filter Tabs with horizontal touch scroll */}
+        <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg text-xs overflow-x-auto w-full sm:w-auto no-scrollbar touch-pan-x">
           {(['all', 'theft', 'overuse', 'normal'] as const).map((filter) => {
             const count =
               filter === 'all'
@@ -99,7 +99,7 @@ export const MetersTable: React.FC<MetersTableProps> = ({
                 key={filter}
                 type="button"
                 onClick={() => setStatusFilter(filter)}
-                className={`px-3 py-1 rounded-md text-xs font-medium capitalize transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                className={`min-h-[36px] sm:min-h-0 flex-1 sm:flex-none px-3 py-1.5 sm:py-1 rounded-md text-xs font-medium capitalize transition-colors whitespace-nowrap shrink-0 cursor-pointer text-center ${
                   isActive
                     ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-semibold shadow-xs'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
@@ -112,8 +112,122 @@ export const MetersTable: React.FC<MetersTableProps> = ({
         </div>
       </div>
 
-      {/* High-Density Data Grid */}
-      <div className="overflow-x-auto">
+      {/* Mobile Card View (Optimized for screens < 768px) */}
+      <div className="block md:hidden divide-y divide-slate-100 dark:divide-slate-800">
+        {filteredMeters.length === 0 ? (
+          <div className="text-center py-12 px-4 text-xs text-slate-500 dark:text-slate-400">
+            No smart meters match the current search or filter criteria.
+          </div>
+        ) : (
+          filteredMeters.map((meter) => {
+            const isSelected = selectedMeter?.id === meter.id;
+            const isTheft = meter.classification === 'theft';
+            const isOveruse = meter.classification === 'overuse';
+            const isVacant = meter.occupancyStatus === 'vacant';
+            const loadPct = Math.round((meter.currentPowerKw / meter.sanctionedLoadKw) * 100);
+
+            return (
+              <div
+                key={meter.id}
+                onClick={() => onSelectMeter(meter)}
+                className={`p-4 transition-colors cursor-pointer active:bg-slate-100 dark:active:bg-slate-800 ${
+                  isSelected
+                    ? 'bg-slate-100 dark:bg-slate-800 ring-2 ring-inset ring-slate-900 dark:ring-white'
+                    : isTheft
+                    ? 'bg-rose-50/30 dark:bg-rose-950/20'
+                    : isOveruse
+                    ? 'bg-amber-50/30 dark:bg-amber-950/20'
+                    : 'hover:bg-slate-50 dark:hover:bg-slate-800/40'
+                }`}
+              >
+                {/* Card Top Row: ID, Substation & Status */}
+                <div className="flex items-center justify-between gap-2 mb-1.5">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-xs font-bold text-slate-900 dark:text-white">
+                      {meter.id}
+                    </span>
+                    <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
+                      · {meter.transformerId}
+                    </span>
+                  </div>
+
+                  <div>
+                    {isTheft ? (
+                      <span className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 dark:text-rose-400 bg-rose-100/70 dark:bg-rose-950/80 px-2 py-0.5 rounded-md">
+                        <AlertTriangle className="w-3 h-3 text-rose-600 dark:text-rose-400" />
+                        <span>Theft ({Math.round(meter.theftProbability * 100)}%)</span>
+                      </span>
+                    ) : isOveruse ? (
+                      <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-700 dark:text-amber-400 bg-amber-100/70 dark:bg-amber-950/80 px-2 py-0.5 rounded-md">
+                        <Flame className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+                        <span>Overuse ({Math.round(meter.overuseProbability * 100)}%)</span>
+                      </span>
+                    ) : isVacant ? (
+                      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-sky-700 dark:text-sky-400 bg-sky-100/70 dark:bg-sky-950/80 px-2 py-0.5 rounded-md">
+                        <ShieldCheck className="w-3 h-3 text-sky-600 dark:text-sky-400" />
+                        <span>Vacant</span>
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-700 dark:text-emerald-400 bg-emerald-100/70 dark:bg-emerald-950/80 px-2 py-0.5 rounded-md">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                        <span>Normal</span>
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Consumer info */}
+                <div className="font-semibold text-xs text-slate-900 dark:text-white">
+                  {meter.consumerName}
+                </div>
+                <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                  {meter.consumerAddress} · <span className="capitalize">{meter.consumerType}</span>
+                </div>
+
+                {/* Metrics bar */}
+                <div className="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-mono tabular-nums">
+                  <div>
+                    <span className="text-[10px] font-sans text-slate-400 dark:text-slate-500 block">Power Load</span>
+                    <span
+                      className={`font-bold ${
+                        isTheft
+                          ? 'text-rose-600 dark:text-rose-400'
+                          : isOveruse
+                          ? 'text-amber-600 dark:text-amber-400'
+                          : 'text-slate-900 dark:text-white'
+                      }`}
+                    >
+                      {meter.currentPowerKw.toFixed(2)} kW
+                    </span>
+                    <span className="text-[10px] text-slate-400 dark:text-slate-500 ml-1">({loadPct}%)</span>
+                  </div>
+
+                  <div>
+                    <span className="text-[10px] font-sans text-slate-400 dark:text-slate-500 block">Sanctioned</span>
+                    <span className="text-slate-600 dark:text-slate-400">
+                      {meter.sanctionedLoadKw.toFixed(1)} kW
+                    </span>
+                  </div>
+
+                  <div>
+                    <span className="text-[10px] font-sans text-slate-400 dark:text-slate-500 block">Water Flow</span>
+                    <span className="text-slate-800 dark:text-slate-200 font-semibold">
+                      {meter.currentWaterLph.toFixed(1)} L/h
+                    </span>
+                  </div>
+
+                  <div className="flex items-center text-slate-400 dark:text-slate-500">
+                    <ChevronRight className="w-4 h-4 ml-1" />
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+
+      {/* Desktop High-Density Data Grid (Visible on md and larger) */}
+      <div className="hidden md:block overflow-x-auto">
         <table className="w-full text-left text-xs border-collapse">
           <thead>
             <tr className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-medium">

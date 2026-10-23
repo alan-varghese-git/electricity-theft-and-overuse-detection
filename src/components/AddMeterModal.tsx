@@ -59,8 +59,8 @@ export const AddMeterModal: React.FC<AddMeterModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-[1px]">
-      <div className="w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/50 backdrop-blur-[1px]">
+      <div className="w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden flex flex-col max-h-[90vh] shadow-2xl">
         <div className="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
           <h2 className="text-sm font-bold text-slate-900 dark:text-white">
             Add New Smart Meter Node
@@ -68,20 +68,20 @@ export const AddMeterModal: React.FC<AddMeterModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+            className="min-h-[36px] min-w-[36px] p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer flex items-center justify-center"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-5 space-y-4 text-xs">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-5 space-y-4 text-xs overflow-y-auto flex-1">
           {errorMsg && (
             <div className="p-2.5 rounded bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200">
               {errorMsg}
             </div>
           )}
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-slate-600 dark:text-slate-400 mb-1 font-medium">Meter ID</label>
               <input
@@ -89,7 +89,7 @@ export const AddMeterModal: React.FC<AddMeterModalProps> = ({
                 value={meterId}
                 onChange={(e) => setMeterId(e.target.value)}
                 required
-                className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white font-mono focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
+                className="w-full min-h-[44px] sm:min-h-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-base sm:text-xs text-slate-900 dark:text-white font-mono focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
               />
             </div>
             <div>
@@ -127,11 +127,11 @@ export const AddMeterModal: React.FC<AddMeterModalProps> = ({
               value={consumerName}
               onChange={(e) => setConsumerName(e.target.value)}
               required
-              className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
+              className="w-full min-h-[44px] sm:min-h-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-base sm:text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-slate-600 dark:text-slate-400 mb-1 font-medium">Street Address &amp; City</label>
               <input
@@ -139,7 +139,7 @@ export const AddMeterModal: React.FC<AddMeterModalProps> = ({
                 placeholder="e.g., 2410 Aldrich St, Austin, TX"
                 value={consumerAddress}
                 onChange={(e) => setConsumerAddress(e.target.value)}
-                className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
+                className="w-full min-h-[44px] sm:min-h-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-base sm:text-xs text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
               />
             </div>
             <div>
@@ -147,7 +147,7 @@ export const AddMeterModal: React.FC<AddMeterModalProps> = ({
               <select
                 value={consumerType}
                 onChange={(e) => setConsumerType(e.target.value as ConsumerType)}
-                className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
+                className="w-full min-h-[44px] sm:min-h-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-base sm:text-xs text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
               >
                 <option value="residential">Residential</option>
                 <option value="commercial">Commercial</option>
@@ -156,9 +156,9 @@ export const AddMeterModal: React.FC<AddMeterModalProps> = ({
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-3 font-mono">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3 font-mono">
             <div>
-              <label className="block text-slate-600 dark:text-slate-400 mb-1 font-sans font-medium">Sanctioned (kW)</label>
+              <label className="block text-slate-600 dark:text-slate-400 mb-1 font-sans font-medium truncate">Sanctioned</label>
               <input
                 type="number"
                 step="0.5"
@@ -166,11 +166,11 @@ export const AddMeterModal: React.FC<AddMeterModalProps> = ({
                 value={sanctionedLoadKw}
                 onChange={(e) => setSanctionedLoadKw(parseFloat(e.target.value))}
                 required
-                className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
+                className="w-full min-h-[44px] sm:min-h-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 sm:px-3 py-2 text-base sm:text-xs text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
               />
             </div>
             <div>
-              <label className="block text-slate-600 dark:text-slate-400 mb-1 font-sans font-medium">Power (kW)</label>
+              <label className="block text-slate-600 dark:text-slate-400 mb-1 font-sans font-medium truncate">Power kW</label>
               <input
                 type="number"
                 step="0.1"
@@ -178,11 +178,11 @@ export const AddMeterModal: React.FC<AddMeterModalProps> = ({
                 value={initialPowerKw}
                 onChange={(e) => setInitialPowerKw(parseFloat(e.target.value))}
                 required
-                className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
+                className="w-full min-h-[44px] sm:min-h-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 sm:px-3 py-2 text-base sm:text-xs text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
               />
             </div>
             <div>
-              <label className="block text-slate-600 dark:text-slate-400 mb-1 font-sans font-medium">Water (L/h)</label>
+              <label className="block text-slate-600 dark:text-slate-400 mb-1 font-sans font-medium truncate">Water L/h</label>
               <input
                 type="number"
                 step="1"
@@ -190,7 +190,7 @@ export const AddMeterModal: React.FC<AddMeterModalProps> = ({
                 value={initialWaterLph}
                 onChange={(e) => setInitialWaterLph(parseFloat(e.target.value))}
                 required
-                className="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
+                className="w-full min-h-[44px] sm:min-h-0 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 sm:px-3 py-2 text-base sm:text-xs text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
               />
             </div>
           </div>
@@ -199,14 +199,14 @@ export const AddMeterModal: React.FC<AddMeterModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-3.5 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer"
+              className="min-h-[44px] px-4 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-4 py-2 rounded-lg font-semibold bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-200 text-white dark:text-slate-900 transition-colors disabled:opacity-50 cursor-pointer"
+              className="min-h-[44px] px-5 py-2 rounded-lg font-semibold bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-200 text-white dark:text-slate-900 transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
             >
               {isSubmitting ? 'Adding...' : 'Add Meter'}
             </button>

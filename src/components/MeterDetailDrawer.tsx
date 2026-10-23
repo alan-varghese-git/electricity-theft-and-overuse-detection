@@ -117,10 +117,10 @@ export const MeterDetailDrawer: React.FC<MeterDetailDrawerProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-slate-900/50 backdrop-blur-[1px]">
-      <div className="w-full max-w-xl bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 h-full overflow-y-auto flex flex-col">
+      <div className="w-full max-w-full sm:max-w-xl bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 h-full overflow-y-auto flex flex-col shadow-2xl">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-white dark:bg-slate-900 sticky top-0 z-10">
-          <div>
+        <div className="px-4 sm:px-6 py-3.5 sm:py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-white dark:bg-slate-900 sticky top-0 z-10">
+          <div className="min-w-0 pr-2">
             <div className="flex items-center gap-2 text-xs font-mono text-slate-500 dark:text-slate-400">
               <span className="font-bold text-slate-900 dark:text-white">{meter.id}</span>
               <span>·</span>
@@ -128,19 +128,20 @@ export const MeterDetailDrawer: React.FC<MeterDetailDrawerProps> = ({
               <span>·</span>
               <span className="capitalize">{meter.consumerType}</span>
             </div>
-            <h2 className="text-base font-bold text-slate-900 dark:text-white mt-0.5">{meter.consumerName}</h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">{meter.consumerAddress}</p>
+            <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white mt-0.5 truncate">{meter.consumerName}</h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{meter.consumerAddress}</p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+            className="min-h-[40px] min-w-[40px] p-2 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer flex items-center justify-center shrink-0"
+            aria-label="Close details"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="p-6 space-y-6 flex-1">
+        <div className="p-4 sm:p-6 space-y-5 sm:space-y-6 flex-1">
           {/* Status Summary */}
           <div
             className={`p-4 rounded-xl border flex items-start gap-3 ${
@@ -324,7 +325,7 @@ export const MeterDetailDrawer: React.FC<MeterDetailDrawerProps> = ({
                 type="button"
                 onClick={() => handleQuickTamper('meter_bypass')}
                 disabled={isUpdating}
-                className="p-2.5 rounded-lg text-xs font-medium bg-rose-50 dark:bg-rose-950/60 hover:bg-rose-100 dark:hover:bg-rose-900/60 border border-rose-200 dark:border-rose-800/70 text-rose-800 dark:text-rose-200 flex flex-col items-center gap-1 transition-colors disabled:opacity-50 cursor-pointer"
+                className="min-h-[48px] sm:min-h-0 p-2.5 rounded-lg text-xs font-medium bg-rose-50 dark:bg-rose-950/60 hover:bg-rose-100 dark:hover:bg-rose-900/60 border border-rose-200 dark:border-rose-800/70 text-rose-800 dark:text-rose-200 flex flex-col items-center justify-center gap-1 transition-colors disabled:opacity-50 cursor-pointer"
               >
                 <AlertTriangle className="w-4 h-4 text-rose-600 dark:text-rose-400" />
                 <span>Inject Theft</span>
@@ -333,7 +334,7 @@ export const MeterDetailDrawer: React.FC<MeterDetailDrawerProps> = ({
                 type="button"
                 onClick={() => handleQuickTamper('crypto_mining')}
                 disabled={isUpdating}
-                className="p-2.5 rounded-lg text-xs font-medium bg-amber-50 dark:bg-amber-950/60 hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-200 dark:border-amber-800/70 text-amber-800 dark:text-amber-200 flex flex-col items-center gap-1 transition-colors disabled:opacity-50 cursor-pointer"
+                className="min-h-[48px] sm:min-h-0 p-2.5 rounded-lg text-xs font-medium bg-amber-50 dark:bg-amber-950/60 hover:bg-amber-100 dark:hover:bg-amber-900/60 border border-amber-200 dark:border-amber-800/70 text-amber-800 dark:text-amber-200 flex flex-col items-center justify-center gap-1 transition-colors disabled:opacity-50 cursor-pointer"
               >
                 <Flame className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                 <span>Inject Overuse</span>
@@ -342,7 +343,7 @@ export const MeterDetailDrawer: React.FC<MeterDetailDrawerProps> = ({
                 type="button"
                 onClick={() => handleQuickTamper('vacation')}
                 disabled={isUpdating}
-                className="p-2.5 rounded-lg text-xs font-medium bg-sky-50 dark:bg-sky-950/60 hover:bg-sky-100 dark:hover:bg-sky-900/60 border border-sky-200 dark:border-sky-800/70 text-sky-800 dark:text-sky-200 flex flex-col items-center gap-1 transition-colors disabled:opacity-50 cursor-pointer"
+                className="min-h-[48px] sm:min-h-0 p-2.5 rounded-lg text-xs font-medium bg-sky-50 dark:bg-sky-950/60 hover:bg-sky-100 dark:hover:bg-sky-900/60 border border-sky-200 dark:border-sky-800/70 text-sky-800 dark:text-sky-200 flex flex-col items-center justify-center gap-1 transition-colors disabled:opacity-50 cursor-pointer"
               >
                 <ShieldCheck className="w-4 h-4 text-sky-600 dark:text-sky-400" />
                 <span>Set Vacant</span>
@@ -351,7 +352,7 @@ export const MeterDetailDrawer: React.FC<MeterDetailDrawerProps> = ({
                 type="button"
                 onClick={() => handleQuickTamper('none')}
                 disabled={isUpdating}
-                className="p-2.5 rounded-lg text-xs font-medium bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 flex flex-col items-center gap-1 transition-colors disabled:opacity-50 cursor-pointer"
+                className="min-h-[48px] sm:min-h-0 p-2.5 rounded-lg text-xs font-medium bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-1 transition-colors disabled:opacity-50 cursor-pointer"
               >
                 <RotateCcw className="w-4 h-4 text-slate-500 dark:text-slate-400" />
                 <span>Restore Normal</span>
@@ -361,16 +362,16 @@ export const MeterDetailDrawer: React.FC<MeterDetailDrawerProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center justify-between gap-3 sticky bottom-0">
-          <span className="text-xs text-slate-500 dark:text-slate-400 font-mono tabular-nums">
-            Updated {new Date(meter.updatedAt).toLocaleTimeString()}
+        <div className="px-4 sm:px-6 py-3.5 sm:py-4 pb-safe border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center justify-between gap-3 sticky bottom-0">
+          <span className="text-xs text-slate-500 dark:text-slate-400 font-mono tabular-nums truncate">
+            {new Date(meter.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
           </span>
           <button
             type="button"
             onClick={() => onDispatchWorkOrder(meter)}
-            className="px-4 py-2 rounded-lg text-xs font-semibold bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-200 text-white dark:text-slate-900 flex items-center gap-2 transition-colors cursor-pointer"
+            className="min-h-[44px] px-4 py-2 rounded-lg text-xs font-semibold bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-200 text-white dark:text-slate-900 flex items-center gap-2 transition-colors cursor-pointer shrink-0 shadow-xs"
           >
-            <FileText className="w-3.5 h-3.5" />
+            <FileText className="w-4 h-4" />
             <span>Create Work Order</span>
           </button>
         </div>

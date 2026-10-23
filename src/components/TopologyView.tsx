@@ -16,8 +16,8 @@ export const TopologyView: React.FC<TopologyViewProps> = ({
   onSelectMeter,
 }) => {
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 mb-6 transition-colors duration-150">
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-5 pb-3 border-b border-slate-200 dark:border-slate-800">
+    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 sm:p-5 mb-6 transition-colors duration-150 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-5 pb-3 border-b border-slate-200 dark:border-slate-800">
         <div>
           <h2 className="text-sm font-bold text-slate-900 dark:text-white">
             Substation Feeders &amp; Connected Smart Meters
@@ -136,7 +136,7 @@ export const TopologyView: React.FC<TopologyViewProps> = ({
                       key={meter.id}
                       type="button"
                       onClick={() => onSelectMeter(meter)}
-                      className={`p-2.5 rounded-lg border text-left transition-colors cursor-pointer ${statusCard}`}
+                      className={`min-h-[64px] p-2.5 rounded-lg border text-left transition-colors cursor-pointer ${statusCard}`}
                     >
                       <div className="flex items-center justify-between gap-1 mb-1">
                         <span className="font-mono text-xs font-bold text-slate-900 dark:text-white">

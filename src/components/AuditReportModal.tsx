@@ -66,9 +66,9 @@ export const AuditReportModal: React.FC<AuditReportModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-[1px]">
-      <div className="w-full max-w-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden flex flex-col max-h-[90vh]">
-        <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/50 backdrop-blur-[1px]">
+      <div className="w-full max-w-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden flex flex-col max-h-[90vh] shadow-2xl">
+        <div className="px-4 sm:px-6 py-3.5 sm:py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
           <div>
             <h2 className="text-sm font-bold text-slate-900 dark:text-white">
               Multi-Source Grid Audit Report
@@ -80,7 +80,7 @@ export const AuditReportModal: React.FC<AuditReportModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+            className="min-h-[40px] min-w-[40px] p-2 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer flex items-center justify-center"
           >
             <X className="w-5 h-5" />
           </button>
@@ -145,11 +145,11 @@ export const AuditReportModal: React.FC<AuditReportModalProps> = ({
           </div>
         </div>
 
-        <div className="px-6 py-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-between">
+        <div className="px-4 sm:px-6 py-3.5 sm:py-4 pb-safe border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-between gap-3">
           <button
             type="button"
             onClick={() => window.print()}
-            className="px-3.5 py-2 rounded-lg text-xs font-medium bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="min-h-[44px] px-3.5 py-2 rounded-lg text-xs font-medium bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <Printer className="w-4 h-4" />
             <span>Print</span>
@@ -157,7 +157,7 @@ export const AuditReportModal: React.FC<AuditReportModalProps> = ({
           <button
             type="button"
             onClick={handleExportCSV}
-            className="px-4 py-2 rounded-lg text-xs font-semibold bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-200 text-white dark:text-slate-900 flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="min-h-[44px] px-4 py-2 rounded-lg text-xs font-semibold bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-200 text-white dark:text-slate-900 flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
           >
             <Download className="w-4 h-4" />
             <span>Download CSV</span>

@@ -54,34 +54,34 @@ export const XGBoostModelModal: React.FC<XGBoostModelModalProps> = ({ isOpen, on
   const probOveruse = (livePrediction.classProbabilities.overuse * 100).toFixed(1);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-[1px] p-4">
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-[1px] p-2.5 sm:p-4">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-4xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-white dark:bg-slate-900">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 flex items-center justify-center text-blue-700 dark:text-blue-400">
+        <div className="px-4 sm:px-6 py-3.5 sm:py-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-white dark:bg-slate-900">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 pr-2">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 flex items-center justify-center text-blue-700 dark:text-blue-400 shrink-0">
               <Cpu className="w-5 h-5" />
             </div>
-            <div>
-              <h2 className="text-base font-bold text-slate-900 dark:text-white">
-                XGBoost v2.1 Multi-Source Classifier
+            <div className="min-w-0">
+              <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white truncate">
+                XGBoost v2.1 Classifier
               </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Gradient Boosted Decision Trees (GBDT) for Electricity Theft &amp; Sanctioned Overuse Detection
+              <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+                Multi-Source Gradient Boosted Decision Trees (GBDT)
               </p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+            className="min-h-[40px] min-w-[40px] p-2 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer flex items-center justify-center shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 overflow-y-auto space-y-6 text-slate-700 dark:text-slate-300 text-xs">
+        <div className="p-4 sm:p-6 overflow-y-auto space-y-5 sm:space-y-6 text-slate-700 dark:text-slate-300 text-xs flex-1">
           {/* Key Metrics Ribbon */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             <div className="p-3 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl">
@@ -443,14 +443,14 @@ export const XGBoostModelModal: React.FC<XGBoostModelModalProps> = ({ isOpen, on
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between bg-white dark:bg-slate-900">
-          <div className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
-            Model: <span className="font-bold text-slate-800 dark:text-slate-200">XGBoost v2.1-hist</span> • Parameters: 60 Trees (Depth 4)
+        <div className="px-4 sm:px-6 py-3.5 sm:py-4 pb-safe border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3 bg-white dark:bg-slate-900">
+          <div className="text-[11px] text-slate-500 dark:text-slate-400 font-mono truncate">
+            Model: <span className="font-bold text-slate-800 dark:text-slate-200">XGBoost v2.1-hist</span>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg font-semibold text-xs hover:bg-slate-800 dark:hover:bg-slate-200 transition cursor-pointer"
+            className="min-h-[44px] px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg font-semibold text-xs hover:bg-slate-800 dark:hover:bg-slate-200 transition cursor-pointer shrink-0 shadow-xs"
           >
             Close Inspector
           </button>

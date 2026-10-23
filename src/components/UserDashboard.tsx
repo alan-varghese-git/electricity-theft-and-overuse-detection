@@ -186,12 +186,12 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors duration-150">
       {/* Consumer Top Header */}
       <header className="sticky top-0 z-40 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-2 sm:gap-4">
           {/* Brand + Consumer Badge */}
-          <div className="flex items-center gap-3 min-w-0">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
             <svg
-              width="32"
-              height="32"
+              width="30"
+              height="30"
               viewBox="0 0 36 36"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -217,23 +217,23 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
               />
             </svg>
             <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-bold tracking-tight text-slate-900 dark:text-white">
-                  VoltWatch Consumer Portal
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span className="text-xs sm:text-sm font-bold tracking-tight text-slate-900 dark:text-white truncate">
+                  VoltWatch
                 </span>
                 <span className="text-slate-300 dark:text-slate-700">·</span>
-                <span className="font-mono text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <span className="font-mono text-xs font-semibold text-slate-700 dark:text-slate-300 truncate">
                   {meter.id}
                 </span>
               </div>
-              <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+              <div className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 truncate max-w-[160px] sm:max-w-none">
                 {meter.consumerName} · {meter.consumerAddress}
               </div>
             </div>
           </div>
 
           {/* Right Controls: Switch Dataset User, Export Statement, Theme Toggle, Sign Out */}
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <select
               value={meter.id}
               onChange={(e) => {
@@ -262,23 +262,23 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
             <button
               type="button"
               onClick={onToggleTheme}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 transition-colors cursor-pointer"
+              className="min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 inline-flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 transition-colors cursor-pointer"
               title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
               {theme === 'dark' ? (
-                <Sun className="w-3.5 h-3.5 text-amber-400" />
+                <Sun className="w-4 h-4 text-amber-400" />
               ) : (
-                <Moon className="w-3.5 h-3.5 text-slate-600" />
+                <Moon className="w-4 h-4 text-slate-600" />
               )}
             </button>
 
             <button
               type="button"
               onClick={onSignOut}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-200 text-white dark:text-slate-900 transition-colors cursor-pointer"
+              className="min-h-[40px] px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-200 text-white dark:text-slate-900 inline-flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5" />
-              <span>Sign Out</span>
+              <span className="hidden sm:inline">Sign Out</span>
             </button>
           </div>
         </div>
@@ -338,73 +338,72 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
         </div>
 
         {/* 5 Key Consumer Usage Statistics Cards */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
-          <div className="grid grid-cols-2 lg:grid-cols-5 divide-y lg:divide-y-0 lg:divide-x divide-slate-200 dark:divide-slate-800">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-xs">
+          <div className="grid grid-cols-2 lg:grid-cols-5 divide-y sm:divide-y-0 lg:divide-x divide-slate-200 dark:divide-slate-800">
             {/* 1. Real-Time Power Demand */}
-            <div className="p-4">
-              <div className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            <div className="p-3.5 sm:p-4">
+              <div className="text-[11px] sm:text-xs font-medium text-slate-500 dark:text-slate-400">
                 Current Power Draw
               </div>
-              <div className="text-2xl font-bold font-mono text-slate-900 dark:text-white mt-1 tabular-nums">
+              <div className="text-xl sm:text-2xl font-bold font-mono text-slate-900 dark:text-white mt-1 tabular-nums">
                 {meter.currentPowerKw.toFixed(2)}{' '}
                 <span className="text-xs font-normal text-slate-500 dark:text-slate-400">kW</span>
               </div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-mono tabular-nums">
-                {loadPct}% of {meter.sanctionedLoadKw.toFixed(1)} kW limit
+              <div className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 mt-1 font-mono tabular-nums">
+                {loadPct}% of {meter.sanctionedLoadKw.toFixed(1)} kW
               </div>
             </div>
 
             {/* 2. 24-Hour Energy Consumption */}
-            <div className="p-4">
-              <div className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            <div className="p-3.5 sm:p-4">
+              <div className="text-[11px] sm:text-xs font-medium text-slate-500 dark:text-slate-400">
                 24-Hour Energy Usage
               </div>
-              <div className="text-2xl font-bold font-mono text-slate-900 dark:text-white mt-1 tabular-nums">
+              <div className="text-xl sm:text-2xl font-bold font-mono text-slate-900 dark:text-white mt-1 tabular-nums">
                 {dailyEnergyKwh.toFixed(1)}{' '}
                 <span className="text-xs font-normal text-slate-500 dark:text-slate-400">kWh</span>
               </div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-mono tabular-nums">
-                Avg {avgHourlyKw.toFixed(2)} kW · Peak {peakPowerKw.toFixed(2)} kW
+              <div className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 mt-1 font-mono tabular-nums truncate">
+                Avg {avgHourlyKw.toFixed(1)} kW · Peak {peakPowerKw.toFixed(1)} kW
               </div>
             </div>
 
             {/* 3. Municipal Water Usage */}
-            <div className="p-4">
-              <div className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                Water Consumption (24h)
+            <div className="p-3.5 sm:p-4">
+              <div className="text-[11px] sm:text-xs font-medium text-slate-500 dark:text-slate-400">
+                Water Usage (24h)
               </div>
-              <div className="text-2xl font-bold font-mono text-slate-900 dark:text-white mt-1 tabular-nums">
+              <div className="text-xl sm:text-2xl font-bold font-mono text-slate-900 dark:text-white mt-1 tabular-nums">
                 {dailyWaterLiters.toFixed(0)}{' '}
                 <span className="text-xs font-normal text-slate-500 dark:text-slate-400">Liters</span>
               </div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-mono tabular-nums">
-                Live: {meter.currentWaterLph.toFixed(1)} L/h · Avg {avgWaterLph.toFixed(1)} L/h
+              <div className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 mt-1 font-mono tabular-nums truncate">
+                Live: {meter.currentWaterLph.toFixed(1)} L/h
               </div>
             </div>
 
             {/* 4. Estimated Monthly Utility Bill */}
-            <div className="p-4">
-              <div className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            <div className="p-3.5 sm:p-4">
+              <div className="text-[11px] sm:text-xs font-medium text-slate-500 dark:text-slate-400">
                 Est. Monthly Bill (30d)
               </div>
-              <div className="text-2xl font-bold font-mono text-slate-900 dark:text-white mt-1 tabular-nums">
+              <div className="text-xl sm:text-2xl font-bold font-mono text-slate-900 dark:text-white mt-1 tabular-nums">
                 ${estimatedTotalMonthlyBill.toFixed(2)}
               </div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-mono tabular-nums">
+              <div className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 mt-1 font-mono tabular-nums truncate">
                 Elec ${estimatedMonthlyEnergyCost.toFixed(0)} · Water ${estimatedMonthlyWaterCost.toFixed(0)}
-                {overusePenalty > 0 ? ` · +$${overusePenalty.toFixed(0)} overload` : ''}
               </div>
             </div>
 
             {/* 5. Line Quality & Occupancy */}
-            <div className="p-4 col-span-2 lg:col-span-1">
-              <div className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                Power Quality &amp; Occupancy
+            <div className="p-3.5 sm:p-4 col-span-2 lg:col-span-1">
+              <div className="text-[11px] sm:text-xs font-medium text-slate-500 dark:text-slate-400">
+                Power Quality &amp; Status
               </div>
-              <div className="text-2xl font-bold font-mono text-slate-900 dark:text-white mt-1 tabular-nums">
+              <div className="text-xl sm:text-2xl font-bold font-mono text-slate-900 dark:text-white mt-1 tabular-nums">
                 {meter.voltageV}V · PF {(meter.powerFactor || 0.95).toFixed(2)}
               </div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 capitalize">
+              <div className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 mt-1 capitalize">
                 Occupancy: <strong className="text-slate-800 dark:text-slate-200">{meter.occupancyStatus}</strong>
               </div>
             </div>
@@ -483,7 +482,7 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
             </div>
 
             {/* Time-of-Use (ToU) Summary Strip */}
-            <div className="grid grid-cols-3 gap-3 pt-4 mt-4 border-t border-slate-200 dark:border-slate-800 text-xs font-mono tabular-nums">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 pt-4 mt-4 border-t border-slate-200 dark:border-slate-800 text-xs font-mono tabular-nums">
               <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/50">
                 <div className="font-sans text-[11px] text-slate-500 dark:text-slate-400">Off-Peak (23:00–06:00)</div>
                 <div className="font-bold text-slate-900 dark:text-white mt-0.5">{offPeakKwh.toFixed(1)} kWh</div>
@@ -502,7 +501,7 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
           {/* Right Column: Usage Summary & Consumer Controls */}
           <div className="lg:col-span-4 space-y-5">
             {/* Consumer Load & Mode Controls */}
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 space-y-3.5">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 sm:p-5 space-y-3.5 shadow-xs">
               <div>
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white">
                   Household Mode &amp; Load Controls
@@ -517,13 +516,13 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
                   type="button"
                   onClick={() => handleUpdateConsumerMode('normal')}
                   disabled={isUpdatingMode}
-                  className="w-full p-2.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-left flex items-center justify-between text-xs transition-colors cursor-pointer"
+                  className="w-full min-h-[50px] p-3 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-left flex items-center justify-between text-xs transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2 font-medium text-slate-800 dark:text-slate-200">
-                    <RotateCcw className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                    <RotateCcw className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                     <span>Standard Household Load</span>
                   </span>
-                  <span className="font-mono text-slate-500 dark:text-slate-400">
+                  <span className="font-mono text-slate-500 dark:text-slate-400 shrink-0">
                     {(meter.sanctionedLoadKw * 0.48).toFixed(1)} kW
                   </span>
                 </button>
@@ -532,26 +531,26 @@ export const UserDashboard: React.FC<UserDashboardProps> = ({
                   type="button"
                   onClick={() => handleUpdateConsumerMode('vacation')}
                   disabled={isUpdatingMode}
-                  className="w-full p-2.5 rounded-lg border border-sky-200 dark:border-sky-800/80 bg-sky-50/40 dark:bg-sky-950/30 hover:bg-sky-100/50 dark:hover:bg-sky-900/40 text-left flex items-center justify-between text-xs transition-colors cursor-pointer"
+                  className="w-full min-h-[50px] p-3 rounded-lg border border-sky-200 dark:border-sky-800/80 bg-sky-50/40 dark:bg-sky-950/30 hover:bg-sky-100/50 dark:hover:bg-sky-900/40 text-left flex items-center justify-between text-xs transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2 font-medium text-sky-900 dark:text-sky-200">
-                    <ShieldCheck className="w-4 h-4 text-sky-600 dark:text-sky-400" />
+                    <ShieldCheck className="w-4 h-4 text-sky-600 dark:text-sky-400 shrink-0" />
                     <span>Enable Vacation / Away Mode</span>
                   </span>
-                  <span className="font-mono text-sky-700 dark:text-sky-400">0.1 L/h · 0.11 kW</span>
+                  <span className="font-mono text-sky-700 dark:text-sky-400 shrink-0">0.1 L/h · 0.11 kW</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => handleUpdateConsumerMode('heavy_appliance')}
                   disabled={isUpdatingMode}
-                  className="w-full p-2.5 rounded-lg border border-amber-200 dark:border-amber-800/80 bg-amber-50/40 dark:bg-amber-950/30 hover:bg-amber-100/50 dark:hover:bg-amber-900/40 text-left flex items-center justify-between text-xs transition-colors cursor-pointer"
+                  className="w-full min-h-[50px] p-3 rounded-lg border border-amber-200 dark:border-amber-800/80 bg-amber-50/40 dark:bg-amber-950/30 hover:bg-amber-100/50 dark:hover:bg-amber-900/40 text-left flex items-center justify-between text-xs transition-colors cursor-pointer"
                 >
                   <span className="flex items-center gap-2 font-medium text-amber-900 dark:text-amber-200">
-                    <Flame className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                    <Flame className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
                     <span>Simulate Heavy EV / HVAC Overload</span>
                   </span>
-                  <span className="font-mono text-amber-700 dark:text-amber-400">
+                  <span className="font-mono text-amber-700 dark:text-amber-400 shrink-0">
                     {(meter.sanctionedLoadKw * 2.1).toFixed(1)} kW
                   </span>
                 </button>
