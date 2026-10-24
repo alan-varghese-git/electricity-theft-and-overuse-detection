@@ -7,7 +7,8 @@ import {
   Flame,
   ShieldCheck,
   RotateCcw,
-  CheckCircle2
+  CheckCircle2,
+  ChevronDown
 } from 'lucide-react';
 import { Meter } from '../types';
 import { updateMeterSimulationReading } from '../services/firestoreService';
@@ -111,33 +112,52 @@ export const SimulationBar: React.FC<SimulationBarProps> = ({
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 mb-5 transition-colors duration-150 shadow-xs">
-      <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 sm:p-3.5 mb-5 transition-colors duration-150 shadow-xs overflow-hidden">
+      <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 min-w-0">
         {/* Left: Target Meter Selection & Scenario Injection Controls */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-2.5">
-          <div className="flex items-center gap-2 w-full sm:w-auto">
-            <label htmlFor="target-meter-select" className="text-xs font-medium text-slate-500 dark:text-slate-400 whitespace-nowrap shrink-0">
-              Target Meter:
-            </label>
-            <select
-              id="target-meter-select"
-              value={targetId}
-              onChange={(e) => {
-                const newId = e.target.value;
-                setTargetId(newId);
-                if (selectedMeter) {
-                  const found = meters.find((m) => m.id === newId);
-                  if (found) onSelectMeter(found);
-                }
-              }}
-              className="flex-1 sm:flex-none min-h-[40px] sm:min-h-0 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-mono font-semibold text-slate-900 dark:text-slate-100 focus:outline-none focus:border-slate-900 dark:focus:border-slate-400 cursor-pointer"
-            >
-              {meters.map((m) => (
-                <option key={m.id} value={m.id}>
-                  {m.id} — {m.consumerName.split('(')[0].trim()} ({m.classification.toUpperCase()})
-                </option>
-              ))}
-            </select>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 w-full lg:w-auto min-w-0">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-2 w-full sm:w-auto min-w-0">
+            <div className="flex items-center justify-between w-full sm:w-auto">
+              <label htmlFor="target-meter-select" className="text-xs font-semibold text-slate-600 dark:text-slate-300 whitespace-nowrap">
+                Target Meter:
+              </label>
+              {getTargetMeter() && (
+                <span className={`text-[10px] font-mono font-bold uppercase sm:hidden px-2 py-0.5 rounded-full ${
+                  getTargetMeter()?.classification === 'theft'
+                    ? 'bg-rose-100 text-rose-700 dark:bg-rose-950/70 dark:text-rose-300'
+                    : getTargetMeter()?.classification === 'overuse'
+                    ? 'bg-amber-100 text-amber-700 dark:bg-amber-950/70 dark:text-amber-300'
+                    : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/70 dark:text-emerald-300'
+                }`}>
+                  {getTargetMeter()?.classification}
+                </span>
+              )}
+            </div>
+
+            <div className="relative w-full sm:w-72 md:w-80 min-w-0">
+              <select
+                id="target-meter-select"
+                value={targetId}
+                onChange={(e) => {
+                  const newId = e.target.value;
+                  setTargetId(newId);
+                  if (selectedMeter) {
+                    const found = meters.find((m) => m.id === newId);
+                    if (found) onSelectMeter(found);
+                  }
+                }}
+                className="w-full min-w-0 max-w-full min-h-[42px] sm:min-h-0 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-3 pr-8 py-2 sm:py-1.5 text-xs font-mono font-semibold text-slate-900 dark:text-slate-100 focus:outline-none focus:border-slate-900 dark:focus:border-slate-400 cursor-pointer appearance-none truncate"
+              >
+                {meters.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.id} — {m.consumerName.split('(')[0].trim()} ({m.classification.toUpperCase()})
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2.5 text-slate-400 dark:text-slate-500">
+                <ChevronDown className="w-4 h-4" />
+              </div>
+            </div>
           </div>
 
           {/* Scenario Buttons: 2x2 grid on mobile, flex on desktop */}

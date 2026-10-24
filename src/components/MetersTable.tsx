@@ -6,7 +6,8 @@ import {
   ShieldCheck,
   Search,
   CheckCircle2,
-  ChevronRight
+  ChevronRight,
+  ChevronDown
 } from 'lucide-react';
 
 interface MetersTableProps {
@@ -71,18 +72,23 @@ export const MetersTable: React.FC<MetersTableProps> = ({
             />
           </div>
 
-          <select
-            value={transformerFilter}
-            onChange={(e) => setTransformerFilter(e.target.value)}
-            className="w-full sm:w-auto min-h-[44px] sm:min-h-0 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-2 sm:py-1.5 text-xs text-slate-700 dark:text-slate-200 focus:outline-none focus:border-slate-900 dark:focus:border-slate-400 font-mono cursor-pointer"
-          >
-            <option value="all">All Substations ({feederOptions.length})</option>
-            {feederOptions.map((f) => (
-              <option key={f.id} value={f.id}>
-                {f.label}
-              </option>
-            ))}
-          </select>
+          <div className="relative w-full sm:w-auto min-w-0">
+            <select
+              value={transformerFilter}
+              onChange={(e) => setTransformerFilter(e.target.value)}
+              className="w-full sm:w-auto min-w-0 min-h-[44px] sm:min-h-0 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-3 pr-8 py-2 sm:py-1.5 text-xs text-slate-700 dark:text-slate-200 focus:outline-none focus:border-slate-900 dark:focus:border-slate-400 font-mono cursor-pointer appearance-none truncate"
+            >
+              <option value="all">All Substations ({feederOptions.length})</option>
+              {feederOptions.map((f) => (
+                <option key={f.id} value={f.id}>
+                  {f.label}
+                </option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2.5 text-slate-400 dark:text-slate-500">
+              <ChevronDown className="w-4 h-4" />
+            </div>
+          </div>
         </div>
 
         {/* Interactive Status Filter Tabs with horizontal touch scroll */}
