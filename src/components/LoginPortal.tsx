@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Shield,
   UserCheck,
-  Search,
   Lock,
   ArrowRight,
   Sun,
   Moon,
   AlertCircle,
   Zap,
-  Droplets,
-  Database,
+  Layers,
   Mail
 } from 'lucide-react';
 import { AuthSession, Meter } from '../types';
@@ -44,33 +42,12 @@ export const LoginPortal: React.FC<LoginPortalProps> = ({
   const [adminEmail, setAdminEmail] = useState<string>('');
   const [adminPassword, setAdminPassword] = useState<string>('');
 
-  // User Login State (Users from Dataset)
-  const [userSearch, setUserSearch] = useState<string>('');
-  const [selectedMeterId, setSelectedMeterId] = useState<string>('');
+  // Consumer Login State (Meter ID & PIN)
+  const [meterIdInput, setMeterIdInput] = useState<string>('');
   const [consumerPin, setConsumerPin] = useState<string>('1234');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
-  // Keep selectedMeterId synced with available dataset meters
-  useEffect(() => {
-    if (meters.length > 0 && (!selectedMeterId || !meters.some((m) => m.id === selectedMeterId))) {
-      setSelectedMeterId(meters[0].id);
-    }
-  }, [meters, selectedMeterId]);
-
-  const filteredMeters = meters.filter((m) => {
-    if (!userSearch.trim()) return true;
-    const q = userSearch.toLowerCase();
-    return (
-      m.id.toLowerCase().includes(q) ||
-      m.consumerName.toLowerCase().includes(q) ||
-      m.consumerAddress.toLowerCase().includes(q) ||
-      m.consumerType.toLowerCase().includes(q)
-    );
-  });
-
-  const selectedMeter = meters.find((m) => m.id === selectedMeterId) || filteredMeters[0] || null;
 
   const handleAdminSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,8 +93,15 @@ export const LoginPortal: React.FC<LoginPortalProps> = ({
     e.preventDefault();
     setErrorMsg(null);
 
-    if (!selectedMeter) {
-      setErrorMsg('Please select a consumer account from the dataset.');
+    const trimmedMeterId = meterIdInput.trim().toUpperCase();
+    if (!trimmedMeterId) {
+      setErrorMsg('Please enter your Smart Meter ID.');
+      return;
+    }
+
+    const matchedMeter = meters.find((m) => m.id.toUpperCase() === trimmedMeterId);
+    if (!matchedMeter) {
+      setErrorMsg(`Smart Meter ID "${trimmedMeterId}" was not found in the selected grid network. Please verify your ID or switch network.`);
       return;
     }
 
@@ -130,9 +114,9 @@ export const LoginPortal: React.FC<LoginPortalProps> = ({
     try {
       const session = await createFirebaseAuthSession({
         role: 'user',
-        subjectId: selectedMeter.id,
-        displayName: selectedMeter.consumerName,
-        subtitle: `${selectedMeter.consumerAddress} · ${selectedMeter.transformerId}`,
+        subjectId: matchedMeter.id,
+        displayName: matchedMeter.consumerName,
+        subtitle: `${matchedMeter.consumerAddress} · ${matchedMeter.transformerId}`,
         authMethod: 'consumer_meter',
       });
       onAuthenticated(session);
@@ -289,184 +273,98 @@ export const LoginPortal: React.FC<LoginPortalProps> = ({
           </div>
         )}
 
-        {/* Mode 1: Consumer User Login (Dataset Users) */}
+        {/* Mode 1: Consumer User Login */}
         {loginMode === 'user' ? (
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 shadow-xs">
-            {/* Left Column: Dataset User Directory */}
-            <div className="lg:col-span-7 p-4 sm:p-5 border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-slate-800 flex flex-col">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-3">
-                <div>
-                  <h2 className="text-sm font-bold text-slate-900 dark:text-white">
-                    Select Consumer Account
-                  </h2>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Choose your meter node from active dataset
-                  </p>
-                </div>
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 sm:p-6 max-w-md mx-auto w-full space-y-5 shadow-xs">
+            <div className="border-b border-slate-200 dark:border-slate-800 pb-4">
+              <h2 className="text-base font-bold text-slate-900 dark:text-white">
+                Consumer Account Sign In
+              </h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Enter your Smart Meter ID and Access PIN to view telemetry, load analysis, and billing.
+              </p>
+            </div>
 
-                <div className="flex items-center gap-1.5 self-start sm:self-auto w-full sm:w-auto">
-                  <Database className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+            <form onSubmit={handleConsumerSubmit} className="space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  Grid Network
+                </label>
+                <div className="relative">
+                  <Layers className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                   <select
                     value={currentDataset}
-                    onChange={(e) => onSwitchDataset(e.target.value as 'default' | 'us_cities')}
+                    onChange={(e) => {
+                      onSwitchDataset(e.target.value as 'default' | 'us_cities');
+                      setErrorMsg(null);
+                    }}
                     disabled={isLoadingData}
-                    className="w-full sm:w-auto bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-medium text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer"
+                    className="w-full min-h-[44px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-9 pr-8 py-2.5 text-base sm:text-xs font-medium text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400 cursor-pointer disabled:opacity-60"
                   >
-                    <option value="us_cities">US Cities Dataset (30 Users)</option>
-                    <option value="default">Greenwood Grid (12 Users)</option>
+                    <option value="us_cities">US Metro Grid (Austin, Seattle, Boston · 30 Meters)</option>
+                    <option value="default">Greenwood Municipal Grid (12 Meters)</option>
                   </select>
                 </div>
               </div>
 
-              {/* Search input - text-base on mobile to avoid iOS Safari auto-zoom */}
-              <div className="relative mb-3">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  value={userSearch}
-                  onChange={(e) => setUserSearch(e.target.value)}
-                  placeholder="Search name, meter ID (e.g. US-ATX-101), or city..."
-                  className="w-full min-h-[44px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-9 pr-3 py-2.5 text-base sm:text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
-                />
-              </div>
-
-              {/* Scrollable Dataset Consumer List with touch optimization */}
-              <div className="max-h-72 sm:max-h-80 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800 border border-slate-200 dark:border-slate-800 rounded-lg touch-pan-y">
-                {isLoadingData ? (
-                  <div className="p-8 text-center text-xs text-slate-500 dark:text-slate-400">
-                    Loading consumer accounts...
-                  </div>
-                ) : filteredMeters.length === 0 ? (
-                  <div className="p-8 text-center text-xs text-slate-500 dark:text-slate-400">
-                    No dataset users match "{userSearch}".
-                  </div>
-                ) : (
-                  filteredMeters.map((m) => {
-                    const isSelected = selectedMeter?.id === m.id;
-                    return (
-                      <button
-                        key={m.id}
-                        type="button"
-                        onClick={() => {
-                          setSelectedMeterId(m.id);
-                          setErrorMsg(null);
-                        }}
-                        className={`w-full min-h-[50px] px-3.5 py-3 text-left transition-colors flex items-center justify-between gap-3 cursor-pointer ${
-                          isSelected
-                            ? 'bg-slate-100 dark:bg-slate-800 font-medium'
-                            : 'hover:bg-slate-50 dark:hover:bg-slate-800/40 active:bg-slate-100 dark:active:bg-slate-800'
-                        }`}
-                      >
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-2">
-                            <span className="font-mono text-xs font-bold text-slate-900 dark:text-white">
-                              {m.id}
-                            </span>
-                            <span className="text-slate-300 dark:text-slate-700">·</span>
-                            <span className="text-xs font-semibold text-slate-900 dark:text-white truncate">
-                              {m.consumerName}
-                            </span>
-                          </div>
-                          <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
-                            {m.consumerAddress} · <span className="capitalize">{m.consumerType}</span>
-                          </div>
-                        </div>
-
-                        <div className="text-right font-mono text-[11px] shrink-0 tabular-nums">
-                          <div className="text-slate-800 dark:text-slate-200 font-semibold">
-                            {m.currentPowerKw.toFixed(2)} kW
-                          </div>
-                          <div className="text-slate-500 dark:text-slate-400">
-                            {m.currentWaterLph.toFixed(1)} L/h
-                          </div>
-                        </div>
-                      </button>
-                    );
-                  })
-                )}
-              </div>
-            </div>
-
-            {/* Right Column: Consumer Session Form */}
-            <form onSubmit={handleConsumerSubmit} className="lg:col-span-5 p-4 sm:p-5 flex flex-col justify-between space-y-4">
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-                    Consumer Account Sign In
-                  </h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    Access your personal smart meter telemetry and usage statement
-                  </p>
-                </div>
-
-                {selectedMeter && (
-                  <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 space-y-2 text-xs">
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono font-bold text-slate-900 dark:text-white">
-                        {selectedMeter.id}
-                      </span>
-                      <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 capitalize">
-                        {selectedMeter.consumerType} Tariff · {selectedMeter.transformerId}
-                      </span>
-                    </div>
-                    <div className="font-semibold text-slate-900 dark:text-white">
-                      {selectedMeter.consumerName}
-                    </div>
-                    <div className="text-slate-500 dark:text-slate-400 text-[11px]">
-                      {selectedMeter.consumerAddress}
-                    </div>
-                    <div className="pt-2 border-t border-slate-200 dark:border-slate-700 flex items-center gap-4 font-mono text-[11px] tabular-nums">
-                      <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
-                        <Zap className="w-3.5 h-3.5 text-amber-500" />
-                        {selectedMeter.currentPowerKw.toFixed(2)} / {selectedMeter.sanctionedLoadKw.toFixed(1)} kW
-                      </span>
-                      <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
-                        <Droplets className="w-3.5 h-3.5 text-sky-500" />
-                        {selectedMeter.currentWaterLph.toFixed(1)} L/h
-                      </span>
-                    </div>
-                  </div>
-                )}
-
-                <div>
-                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
-                    Selected Smart Meter ID
-                  </label>
+              <div>
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  Smart Meter ID
+                </label>
+                <div className="relative">
+                  <Zap className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
-                    readOnly
-                    value={selectedMeter?.id || ''}
-                    className="w-full min-h-[44px] bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-base sm:text-xs font-mono font-bold text-slate-900 dark:text-white"
+                    required
+                    value={meterIdInput}
+                    onChange={(e) => {
+                      setMeterIdInput(e.target.value);
+                      if (errorMsg) setErrorMsg(null);
+                    }}
+                    placeholder={currentDataset === 'us_cities' ? 'e.g. US-ATX-101' : 'e.g. MTR-1001'}
+                    className="w-full min-h-[44px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-9 pr-3 py-2.5 text-base sm:text-xs font-mono font-bold uppercase text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-400 placeholder:normal-case focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
                   />
                 </div>
+                <div className="flex items-center justify-between mt-1 text-[11px] text-slate-500 dark:text-slate-400">
+                  <span>Sample IDs: {currentDataset === 'us_cities' ? 'US-ATX-101, US-SEA-101' : 'MTR-1001, MTR-1002'}</span>
+                  {meters.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setMeterIdInput(meters[0].id)}
+                      className="text-slate-600 dark:text-slate-300 hover:underline font-mono cursor-pointer"
+                    >
+                      Fill sample
+                    </button>
+                  )}
+                </div>
+              </div>
 
-                <div>
-                  <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
-                    Consumer Access PIN
-                  </label>
-                  <div className="relative">
-                    <Lock className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                    <input
-                      type="password"
-                      value={consumerPin}
-                      onChange={(e) => setConsumerPin(e.target.value)}
-                      placeholder="Enter PIN (default: 1234)"
-                      className="w-full min-h-[44px] bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-8 pr-3 py-2 text-base sm:text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
-                    />
-                  </div>
+              <div>
+                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  Consumer Access PIN
+                </label>
+                <div className="relative">
+                  <Lock className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="password"
+                    required
+                    value={consumerPin}
+                    onChange={(e) => {
+                      setConsumerPin(e.target.value);
+                      if (errorMsg) setErrorMsg(null);
+                    }}
+                    placeholder="Enter PIN (default: 1234)"
+                    className="w-full min-h-[44px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-9 pr-3 py-2.5 text-base sm:text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
+                  />
                 </div>
               </div>
 
               <button
                 type="submit"
-                disabled={isSubmitting || !selectedMeter}
+                disabled={isSubmitting}
                 className="w-full min-h-[44px] py-3 px-4 rounded-lg text-sm sm:text-xs font-semibold bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-200 text-white dark:text-slate-900 flex items-center justify-center gap-2 transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
               >
-                <span>
-                  {isSubmitting
-                    ? 'Signing In...'
-                    : `Sign In as ${selectedMeter ? selectedMeter.consumerName.split('(')[0].trim() : 'Consumer'}`}
-                </span>
+                <span>{isSubmitting ? 'Signing In...' : 'Sign In to Consumer Account'}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </form>
