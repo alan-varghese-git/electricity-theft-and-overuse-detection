@@ -1199,3 +1199,7 @@ export const US_CITIES_INCIDENTS: Incident[] = [
     actionNotes: 'Scheduled for on-site secondary line tap check.',
   },
 ];
+
+// Re-export SGCC State Grid Dataset
+export { SGCC_METERS, SGCC_TRANSFORMERS, SGCC_INCIDENTS } from './sgccData';
+

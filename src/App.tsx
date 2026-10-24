@@ -73,7 +73,7 @@ export default function App() {
   // App UI State
   const [activeTab, setActiveTab] = useState<'grid' | 'topology' | 'incidents'>('grid');
   const [statusFilter, setStatusFilter] = useState<'all' | 'theft' | 'overuse' | 'normal'>('all');
-  const [currentDataset, setCurrentDataset] = useState<'default' | 'us_cities'>('us_cities');
+  const [currentDataset, setCurrentDataset] = useState<'default' | 'us_cities' | 'sgcc'>('us_cities');
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -104,8 +104,9 @@ export default function App() {
             setIsLoading(false);
 
             if (liveMeters.length > 0) {
+              const isSgccDataset = liveMeters.some((m) => m.id.startsWith('SGCC-'));
               const isUsDataset = liveMeters.some((m) => m.id.startsWith('US-'));
-              setCurrentDataset(isUsDataset ? 'us_cities' : 'default');
+              setCurrentDataset(isSgccDataset ? 'sgcc' : isUsDataset ? 'us_cities' : 'default');
             }
 
             setSelectedMeter((prev) => {
@@ -197,17 +198,13 @@ export default function App() {
   const handleResetGrid = async () => {
     setIsLoading(true);
     try {
-      if (currentDataset === 'us_cities') {
-        await switchGridDataset('us_cities');
-      } else {
-        await resetGridToDefault();
-      }
+      await switchGridDataset(currentDataset);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleSwitchDataset = async (dataset: 'default' | 'us_cities') => {
+  const handleSwitchDataset = async (dataset: 'default' | 'us_cities' | 'sgcc') => {
     setIsLoading(true);
     setCurrentDataset(dataset);
     setSelectedMeter(null);

@@ -136,3 +136,6 @@ export interface ClassificationResult {
   isFalseAlarmProtected: boolean;
   xgboost?: XGBoostPredictionDetails;
 }
+
+export type GridDatasetId = 'default' | 'us_cities' | 'sgcc';
+

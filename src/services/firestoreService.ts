@@ -20,6 +20,9 @@ import {
   US_CITIES_METERS,
   US_CITIES_TRANSFORMERS,
   US_CITIES_INCIDENTS,
+  SGCC_METERS,
+  SGCC_TRANSFORMERS,
+  SGCC_INCIDENTS,
   generate24HourProfile
 } from './gridSimulation';
 import { classifyMultiSourceReading } from './aiClassifier';
@@ -382,12 +385,22 @@ export async function resetGridToDefault(): Promise<void> {
   await switchGridDataset('default');
 }
 
-// Switch dataset between Synthetic Greenwood (12 nodes) and US Cities (30 nodes)
-export async function switchGridDataset(dataset: 'default' | 'us_cities'): Promise<void> {
+// Switch dataset between Synthetic Greenwood (12 nodes), US Cities (30 nodes), and SGCC State Grid (28 nodes)
+export async function switchGridDataset(dataset: 'default' | 'us_cities' | 'sgcc'): Promise<void> {
   try {
-    const metersToLoad = dataset === 'us_cities' ? US_CITIES_METERS : INITIAL_METERS;
-    const transformersToLoad = dataset === 'us_cities' ? US_CITIES_TRANSFORMERS : INITIAL_TRANSFORMERS;
-    const incidentsToLoad = dataset === 'us_cities' ? US_CITIES_INCIDENTS : INITIAL_INCIDENTS;
+    let metersToLoad = INITIAL_METERS;
+    let transformersToLoad = INITIAL_TRANSFORMERS;
+    let incidentsToLoad = INITIAL_INCIDENTS;
+
+    if (dataset === 'sgcc') {
+      metersToLoad = SGCC_METERS;
+      transformersToLoad = SGCC_TRANSFORMERS;
+      incidentsToLoad = SGCC_INCIDENTS;
+    } else if (dataset === 'us_cities') {
+      metersToLoad = US_CITIES_METERS;
+      transformersToLoad = US_CITIES_TRANSFORMERS;
+      incidentsToLoad = US_CITIES_INCIDENTS;
+    }
 
     // Remove existing records for a clean state
     const currentMetersSnap = await getDocs(collection(db, 'meters'));

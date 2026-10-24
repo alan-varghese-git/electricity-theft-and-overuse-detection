@@ -19,8 +19,8 @@ import {
 
 interface LoginPortalProps {
   meters: Meter[];
-  currentDataset: 'default' | 'us_cities';
-  onSwitchDataset: (dataset: 'default' | 'us_cities') => Promise<void>;
+  currentDataset: 'default' | 'us_cities' | 'sgcc';
+  onSwitchDataset: (dataset: 'default' | 'us_cities' | 'sgcc') => Promise<void>;
   onAuthenticated: (session: AuthSession) => void;
   theme: 'light' | 'dark';
   onToggleTheme: () => void;
@@ -295,12 +295,13 @@ export const LoginPortal: React.FC<LoginPortalProps> = ({
                   <select
                     value={currentDataset}
                     onChange={(e) => {
-                      onSwitchDataset(e.target.value as 'default' | 'us_cities');
+                      onSwitchDataset(e.target.value as 'default' | 'us_cities' | 'sgcc');
                       setErrorMsg(null);
                     }}
                     disabled={isLoadingData}
                     className="w-full min-h-[44px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-9 pr-8 py-2.5 text-base sm:text-xs font-medium text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-slate-400 cursor-pointer disabled:opacity-60"
                   >
+                    <option value="sgcc">SGCC State Grid Benchmark (Shanghai, Beijing · 28 Meters)</option>
                     <option value="us_cities">US Metro Grid (Austin, Seattle, Boston · 30 Meters)</option>
                     <option value="default">Greenwood Municipal Grid (12 Meters)</option>
                   </select>
@@ -321,12 +322,25 @@ export const LoginPortal: React.FC<LoginPortalProps> = ({
                       setMeterIdInput(e.target.value);
                       if (errorMsg) setErrorMsg(null);
                     }}
-                    placeholder={currentDataset === 'us_cities' ? 'e.g. US-ATX-101' : 'e.g. MTR-1001'}
+                    placeholder={
+                      currentDataset === 'sgcc'
+                        ? 'e.g. SGCC-SHA-101'
+                        : currentDataset === 'us_cities'
+                        ? 'e.g. US-ATX-101'
+                        : 'e.g. MTR-1001'
+                    }
                     className="w-full min-h-[44px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-9 pr-3 py-2.5 text-base sm:text-xs font-mono font-bold uppercase text-slate-900 dark:text-white placeholder:font-normal placeholder:text-slate-400 placeholder:normal-case focus:outline-none focus:border-slate-900 dark:focus:border-slate-400"
                   />
                 </div>
                 <div className="flex items-center justify-between mt-1 text-[11px] text-slate-500 dark:text-slate-400">
-                  <span>Sample IDs: {currentDataset === 'us_cities' ? 'US-ATX-101, US-SEA-101' : 'MTR-1001, MTR-1002'}</span>
+                  <span>
+                    Sample IDs:{' '}
+                    {currentDataset === 'sgcc'
+                      ? 'SGCC-SHA-101, SGCC-BEI-101'
+                      : currentDataset === 'us_cities'
+                      ? 'US-ATX-101, US-SEA-101'
+                      : 'MTR-1001, MTR-1002'}
+                  </span>
                   {meters.length > 0 && (
                     <button
                       type="button"

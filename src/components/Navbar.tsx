@@ -25,8 +25,8 @@ interface NavbarProps {
   setActiveTab: (tab: 'grid' | 'topology' | 'incidents') => void;
   theftCount: number;
   overuseCount: number;
-  currentDataset: 'default' | 'us_cities';
-  onSwitchDataset: (dataset: 'default' | 'us_cities') => void;
+  currentDataset: 'default' | 'us_cities' | 'sgcc';
+  onSwitchDataset: (dataset: 'default' | 'us_cities' | 'sgcc') => void;
   onOpenXGBoost: () => void;
   theme: 'light' | 'dark';
   onToggleTheme: () => void;
@@ -167,10 +167,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Desktop Dataset Selector */}
             <select
               value={currentDataset}
-              onChange={(e) => onSwitchDataset(e.target.value as 'default' | 'us_cities')}
+              onChange={(e) => onSwitchDataset(e.target.value as 'default' | 'us_cities' | 'sgcc')}
               className="hidden md:block bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 text-xs font-medium text-slate-800 dark:text-slate-200 focus:outline-none focus:border-slate-900 dark:focus:border-slate-400 cursor-pointer whitespace-nowrap shrink-0"
               aria-label="Select Grid Dataset"
             >
+              <option value="sgcc">SGCC State Grid (28 Nodes)</option>
               <option value="us_cities">US Cities Dataset (30 Nodes)</option>
               <option value="default">Greenwood Grid (12 Nodes)</option>
             </select>
@@ -258,11 +259,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <select
                   value={currentDataset}
                   onChange={(e) => {
-                    onSwitchDataset(e.target.value as 'default' | 'us_cities');
+                    onSwitchDataset(e.target.value as 'default' | 'us_cities' | 'sgcc');
                     setIsMobileMenuOpen(false);
                   }}
                   className="w-full min-h-[44px] bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg pl-9 pr-3 py-2 text-xs font-semibold text-slate-800 dark:text-slate-200 focus:outline-none cursor-pointer"
                 >
+                  <option value="sgcc">SGCC State Grid (28 Nodes)</option>
                   <option value="us_cities">US Cities Dataset (30 Nodes)</option>
                   <option value="default">Greenwood Grid (12 Nodes)</option>
                 </select>
